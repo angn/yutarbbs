@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /threads/rss
+Disallow: /users
+Disallow: /attachments

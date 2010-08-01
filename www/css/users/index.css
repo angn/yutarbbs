@@ -1,0 +1,75 @@
+form {
+	text-align: center;
+}
+
+table {
+	min-width: 550px;
+	margin-top: 0.5em;
+}
+
+td {
+	text-align: center;
+	white-space: nowrap;
+}
+
+tr.fd {
+	display: none;
+}
+
+tbody td:first-child,
+tbody td:first-child + td + td {
+	font: 92% Tahoma, Arial, sans-serif;
+}
+
+tbody td:first-child + td + td + td + td + td {
+	width: 200px;
+	font-family: 돋움, Dotum, Tahoma, Arial, sans-serif;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	text-align: left;
+}
+
+td.email a,
+td.website a {
+	overflow: hidden;
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin: -2px auto;
+	text-indent: -99in;
+	background-repeat: no-repeat;
+}
+
+td.email a {
+	background-image: url(../../img/email.png);
+}
+
+td.website a {
+	background-image: url(../../img/house.png);
+}
+
+a img {
+	border: 0;
+}
+
+a.popup {
+	padding: 0 0.5em;
+}
+
+div.popup {
+	display: none;
+	overflow: hidden;
+	position: absolute;
+	margin-top: 1em;
+	margin-left: 1em;
+	border: 1px solid #999;
+	padding: 0.3em 0.5em;
+	background: #fff;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
+td.hover div.popup {
+	display: block;
+}

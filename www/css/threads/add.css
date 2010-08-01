@@ -1,0 +1,33 @@
+form.message {
+	width: 450px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+form.message p {
+	margin: 0.5em 0;
+}
+
+form.message p.subject input {
+	width: 98%;
+	font-size: 108%;
+	font-weight: bolder;
+	font-family: 돋움, Dotum, sans-serif;
+}
+
+form.message textarea {
+	width: 98%;	
+}
+
+form.message p.attachment {
+	float: left;
+	margin: 0;
+}
+
+form.message p.submit {
+	text-align: right;
+}
+	
+form.message p.submit input {
+	font-size: 125%;
+}

@@ -1,0 +1,277 @@
+html {
+	-webkit-text-size-adjust: none;
+	background: #fff;
+	-webkit-tap-highlight-color: rgba(0,32,96,0.3);
+}
+
+body {
+	width: auto;
+	margin: 0;
+	padding: 0 0 1ex;
+	border: 0;
+	font-size: 100%;
+}
+
+a {
+	color: #000;
+}
+
+a:focus, a:active, a:hover {
+	color: #000;
+    background-color: transparent;
+}
+
+h1 {
+    display: none;
+}
+
+div.user {
+	float: none;
+	padding: 0.8ex 1em;
+	text-align: right;
+    font-size: 80%;
+    background: #eee;
+}
+
+div.user a {
+    color: #666;
+}
+
+div.menu {
+	margin: 0;
+    border-bottom: 1px solid #555;
+	padding: 0;
+	overflow: hidden;
+	white-space: normal;
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#eee), to(#bbb), color-stop(0.5, #ddd));
+    font-size: 90%;
+    text-shadow: #fff 0 1px 2px;
+}
+
+div.menu ol {
+	float: none;
+	display: inline;
+}
+
+div.menu ul  {
+	float: none;
+	display: inline;
+}
+
+div.menu ul li ~ li {
+	display: none;
+}
+
+div.menu li a {
+    margin-top: -0.5ex;
+	padding: 1ex;
+    color: #000;
+}
+
+div.container {
+	margin: 0;
+	width: auto;
+}
+
+h2 {
+	margin: 0;
+    border-bottom: 1px solid #248;
+	font-size: 100%;
+	line-height: 1.5;
+	text-align: center;
+	color: #fff;
+	background: #224f9a;
+    font-size: 90%;
+    text-shadow: #248 0 1px 1px;
+}
+
+h3 {
+	width: auto;
+	margin: 0;
+	padding: 1ex 1ex 0;
+	background: none;
+	font-size: 110%;
+}
+
+div.box, div.past {
+	display: none;
+}
+
+form.login input[type=text], form.login input[type=password],
+form.login input[type=submit] {
+	margin-bottom: 1ex;
+	display: block;
+}
+
+small.replies {
+	color: #f60;
+}
+
+table.threads,
+table.threads tbody,
+table.threads tfoot,
+table.threads tr,
+table.threads th,
+table.threads td {
+	display: block;
+	width: auto !important;
+}
+
+table.threads {
+	margin: 0 0 1ex;
+}
+
+table.threads tr {
+	border-bottom: 1px solid #ccc;
+}
+
+table.threads tr:hover {
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#36c), to(#224f9a));
+}
+
+table.threads thead,
+table.threads td:first-child,
+table.threads td:last-child {
+	display: none;
+}
+
+table.threads td {
+	line-height: normal;
+}
+
+table.threads td:nth-of-type(2) {
+	padding: 1ex 1ex 0.5ex;
+}
+
+table.threads td:nth-of-type(3) {
+	float: left;
+	width: 50%;
+	padding: 0 1ex;
+	text-align: left;
+	color: #369;
+}
+
+table.threads td:nth-of-type(4) {
+	padding: 0 1ex 1ex;
+	text-align: right;
+}
+
+p.search {
+    width: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5ex;
+}
+
+p.search input[type=search] {
+	font-size: 80%;
+}
+
+p.search input[type=submit] {
+	display: none;
+}
+
+div.commands {
+	width: auto;
+	padding: 0 1ex;
+}
+
+div.message {
+	width: auto;
+	padding: 0 1ex;
+}
+
+div.message p.remark {
+	margin: 0;
+}
+
+div.message dd.author {
+	float: left;
+	padding: 1ex 0 0;
+	color: #369;
+}
+
+div.message dd.author a {
+	color: #369;
+}
+
+div.message dd.created {
+	padding: 1ex 0 0;
+}
+
+div.message div.text {
+	float: none;
+    clear: both;
+	margin: 0;
+	padding: 0;
+    width: auto;
+}
+
+div.message div.text p {
+	line-height: 1.4;
+}
+
+div.message div.attachment {
+	margin: 1ex 0;
+}
+
+address {
+	display: none;
+}
+
+table.users {
+	min-width: 0;
+	width: 100%;
+	border: 0;
+	color: #333;
+	font-size: 90%;
+}
+
+table.users thead {
+	display: none;
+}
+
+table.users td {
+	padding: 0;
+}
+
+table.users td:first-child {
+	padding-left: 1ex;
+	width: 3ex;
+}
+
+table.users td:first-child + td + td {
+	white-space: normal;
+}
+
+table.users td:first-child + td + td + td {
+	width: 28px;
+}
+table.users td:first-child + td + td + td + td {
+	width: 28px;
+	padding-right: 1ex;
+}
+
+table.users td:first-child + td + td + td + td + td {
+	display: none;
+}
+
+table.users a {
+	margin: 0;
+	width: 28px;
+	height: 24px;
+    background-position: center;
+}
+
+@media screen and (min-width: 480px) {
+	table.users td.email a {
+		display: inline;
+		background: none;
+		font-size: 80%;
+    }
+}
+
+p.user-search {
+	display: none;
+}

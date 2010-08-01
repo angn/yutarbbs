@@ -1,0 +1,43 @@
+div.box {
+	width: 500px;
+	margin: 0 auto 1em;
+}
+
+div.box h3 {
+	padding: 0.5em 0;
+	text-align: center;
+	background: #bcd;
+	border-bottom: 1px solid #abc;
+}
+
+div.box div.text {
+	min-height: 25em;
+	border-width: 0 1px 1px;
+	border-style: solid;
+	border-color: #ccc;
+	padding: 1px 0.5em;
+}
+
+div.box div.past {
+	padding: 0.3em 0.5em;
+	text-align: right;
+}
+
+* html div.box div.text {
+	height: 25em;
+}
+
+form.login {
+	margin: 1em 0;
+	text-align: center;
+}
+
+form.login label.hidden {
+	display: none;
+}
+
+form.login input.field {
+	width: 6em;
+	text-align: center;
+	font: bolder 150% Tahoma, Arial, sans-serif;
+}

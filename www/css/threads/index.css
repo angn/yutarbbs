@@ -1,0 +1,104 @@
+p.search,
+div.commands {
+	width: 550px;	
+	margin: 0 auto;
+}
+
+p.search {
+	text-align: right;
+}
+
+table {
+	table-layout: fixed;
+	width: 550px;
+	margin: 0.5em auto;
+}
+
+td:first-child,
+td:first-child + td + td + td + td {
+	overflow: hidden;
+	width: 35px;
+	white-space: nowrap;
+}
+
+html.webkit td:first-child,
+html.webkit td:first-child + td + td + td + td {
+	width: 45px;
+}
+
+td:first-child + td + td,
+td:first-child + td + td + td {
+	overflow: hidden;
+	width: 60px;
+	white-space: nowrap;
+}
+
+html.webkit td:first-child + td + td,
+html.webkit td:first-child + td + td + td {
+	width: 70px;
+}
+
+td:first-child,
+td + td + td {
+	text-align: center;
+}
+
+tbody td {
+	cursor: pointer;
+}
+
+tbody tr:hover {
+	background-color: rgb(162,26,53);
+	background-color: #224f9a;
+	color: #fff;
+}
+
+tbody tr.fc {
+	background-color: rgb(162,26,53);
+	background-color: #224f9a;
+	color: #fff;
+}
+
+tbody tr:hover a {
+	color: #fff;
+}
+
+tbody tr.fc a {
+	color: #fff;
+}
+
+tbody td:first-child,
+tbody td:first-child + td + td + td,
+tbody td:first-child + td + td + td + td {
+	font: 92% Tahoma, Arial, sans-serif;
+}
+
+tbody img {
+	margin: -2px 0;
+}
+
+small.replies {
+	font: bolder 86% Tahoma, Arial, sans-serif;
+	color: #f90;
+	color: #99f;
+}
+
+#popup {
+	position: absolute;
+	width: 30em;
+	height: 20em;
+	margin-top: -4px;
+	margin-left: 200px;
+	border-width: 1px 3px 3px 1px;
+	border-style: solid;
+	border-color: #666;
+}
+
+p.pages {
+	font-size: 92%;
+}
+
+p.add {
+	margin-top: -1.5em;
+	text-align: right;
+}

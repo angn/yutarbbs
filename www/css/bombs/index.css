@@ -1,0 +1,20 @@
+p.notice {
+	margin-bottom: 1em;
+	text-align: center;
+}
+
+ul.bombs {
+	margin: 1em auto;
+	text-align: center;
+	line-height: 1.5;
+}
+
+form {
+	width: 26em;
+	line-height: 1.5;
+}
+
+form p.submit {
+	text-align: right;
+	margin-top: -1.5em;
+}

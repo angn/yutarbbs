@@ -1,0 +1,10 @@
+html {
+	background: transparent;
+}
+
+body {
+	border: 0;
+	width: auto;
+	margin: 0.5em;
+	line-height: 1.3;
+}
