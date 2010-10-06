@@ -50,22 +50,7 @@ function format_text($s)
     $s = preg_replace_callback('[<tex>(.+?)</tex>]s', 'mathtex', $s);
     if ($s == '')
         $s = '&nbsp;';
-    return $s;
-
-	//$s = trim($s);
-	//$s = preg_replace('/\r?\n/', '<br>', $s);
-	/*
-	$s = str_replace(
-		array('&', "\r\n", "\n",   '  ', "\t"),
-		array('&amp;', '<br>', '<br>', ' &nbsp;', ' &nbsp; &nbsp;'),
-	   	$s);
-	$s = preg_replace('{(?<!["\'])\bhttps?://[^\s<]+}', '<a target="_blank" href="$0">$0</a>', $s);
-	$s = preg_replace_callback('[<tex>(.+?)</tex>]s', 'mathtex', $s);
-	$s = preg_replace('#<([^A-Z/]|/[^A-Z])#i', '&lt;$1', $s);
-	if ($s == '')
-		$s = '&nbsp;';
 	return "<p>$s</p>";
-	*/
 }
 
 function format_text_each(&$s) {
@@ -77,9 +62,7 @@ function format_text_each(&$s) {
 		array('<br>', '<br>', ' &nbsp;', ' &nbsp; &nbsp;'),
 	   	$s);
 	$s = preg_replace('{\bhttps?://[^\s<]+}', '<a target="_blank" href="$0">$0</a>', $s);
-	if ($s == '')
-		$s = '&nbsp;';
-	$s = "<p>$s</p>";
+	//$s = "<p>$s</p>";
 }
 
 function is_whitespace($s)

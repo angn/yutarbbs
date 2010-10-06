@@ -49,3 +49,18 @@ function repost(n) {
 	m.submit();
 	return false;
 }
+
+function follow1s(n, s) {
+	var x = n - s.length;
+	var e = document.getElementById('comment' + x);
+    if (e) {
+    	location.hash = '#comment' + x;
+        //e.scrollIntoView(true);
+        e.style.backgroundColor = '#ffffdd';
+        setTimeout(function() {
+            e.style.backgroundColor = '';
+            e = null;
+        }, 3000);
+    }
+    return false;
+}

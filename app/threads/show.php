@@ -50,7 +50,13 @@
 		<?= nl2br(h($thread->remark)) ?></p>
 </div>
 
-<?php $n = count($messages); foreach ($messages as $i => $m): $a ^= 1 ?><hr><div class="message <?php $a and print 'a' ?>">
+<?php $n = count($messages); foreach ($messages as $i => $m):
+    $a ^= 1;
+    $m->message = preg_replace('/^(1{3,})(?=\s)/s',
+            '<a href="#" onclick="return follow1s(' . $i . ',\'$1\')">$1</a>',
+            $m->message);
+?>
+<hr><div id="comment<?php echo $i ?>" class="message <?php $a and print 'a' ?>">
 	<dl>
 		<dt>글쓴이</dt><dd class="author">
 		    <a href="#" title="댓글1" onclick="return add1s(<?php echo $n - $i ?>)">
