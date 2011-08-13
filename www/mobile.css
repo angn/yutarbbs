@@ -1,0 +1,254 @@
+html {
+	-webkit-text-size-adjust: none;
+}
+
+body {
+	width: auto;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: #fff;
+	font-size: 100%;
+}
+
+a:focus, a:active, a:hover {
+	color: #224f9a;
+    background-color: transparent;
+}
+
+h1 {
+    display: none;
+}
+
+.identity {
+	float: none;
+    margin: 0;
+	padding: 1ex 1em;
+	text-align: right;
+    font-size: 75%;
+    background: #eee;
+}
+
+.identity a {
+    color: #666;
+}
+
+.menu {
+	margin: 0;
+    border-bottom: 1px solid #555;
+	padding: 0 1ex 0.5ex;
+	overflow: hidden;
+	white-space: normal;
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#eee), color-stop(0.5, #ddd), to(#bbb));
+    font-size: 90%;
+    text-shadow: #fff 0 1px 2px;
+    word-spacing: -1em;
+    text-align: right;
+    color: transparent;
+}
+
+.menu a {
+    float: left;
+    margin: 0 0;
+	padding: 0.6ex 1ex;
+    color: #000 !important;
+    text-indent: 0;
+}
+
+.minor {
+    display: none;
+}
+
+.container {
+	margin: 0;
+	width: auto;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+address {
+    display: none;
+}
+
+h2 {
+	margin: 0;
+    border-bottom: 1px solid #248;
+	font-size: 100%;
+	line-height: 1.5;
+	text-align: center;
+	color: #fff;
+	background: #224f9a;
+    font-size: 90%;
+    text-shadow: #248 0 1px 1px;
+}
+
+.login {
+    width: auto;
+    margin: 1ex;
+}
+
+.login span {
+    display: none;
+}
+
+h3 {
+	width: auto;
+	margin: 0;
+	padding: 1ex 12px 0;
+    border: 0;
+	background: none;
+	font-size: 110%;
+    color: #000;
+    white-space: normal;
+}
+
+.forum h3 {
+    display: none;
+}
+
+.forum .search {
+    width: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0.5ex;
+}
+
+.forum .search input[type=search] {
+    width: 10em;
+	font-size: 75%;
+}
+
+.forum .search input[type=submit] {
+	display: none;
+}
+
+.forum li {
+	border-bottom: 1px solid #ccc;
+}
+
+.forum ol a:hover * {
+    color: #000;
+}
+
+.forum .subject {
+    display: block;
+    float: none;
+    width: auto;
+    padding: 0 0 0.5ex;
+    color: #000;
+}
+
+.forum .replies {
+	color: #f90;
+}
+
+.forum .author {
+    width: auto;
+    padding: 0;
+}
+
+.forum .date {
+    display: block;
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+
+.forum .hits {
+    display: none;
+}
+
+.thread .author {
+    font-weight: 400;
+}
+
+.thread .article {
+    line-height: 1.5;
+}
+
+.thread .remark {
+    width: 75%;
+}
+
+.thread .attachment {
+	margin: 1ex 12px;
+}
+
+.thread .attachment img {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid #fff;
+    outline: 1px solid #000;
+}
+
+.thread h4 {
+    display: none;
+}
+
+.thread dl .info {
+    float: left;
+    width: auto;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.thread dl .info .author,
+.thread dl .info .hid {
+    display: inline;
+    position: static;
+}
+
+.thread dl dd {
+    clear: both;
+    min-height: 0;
+    padding: 0.5ex 12px 1em;
+}
+
+.users {
+	min-width: 0;
+	width: 100%;
+	border: 0;
+	color: #333;
+	font-size: 90%;
+}
+
+.users thead {
+	display: none;
+}
+
+.users td {
+    width: auto;
+	padding: 0.5ex 0 0.5ex 1em;
+    white-space: nowrap;
+}
+
+.users br {
+    display: none;
+}
+
+@media all and (max-width: 479px) {
+    .users .email {
+        overflow: hidden;
+        text-indent: -99in;
+        position: absolute;
+        width: 16px;
+        height: 12px;
+        margin: 3px;
+        background: url(email.png);
+    }
+}
+
+.users td + td + td + td {
+    display: none;
+}
+
+.users a {
+	margin: 0;
+	width: 28px;
+	height: 24px;
+    background-position: center;
+}

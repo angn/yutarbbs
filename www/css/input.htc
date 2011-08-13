@@ -1,3 +1,0 @@
-<script>
-element.className += ' ' + element.type
-</script>

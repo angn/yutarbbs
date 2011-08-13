@@ -1,8 +1,0 @@
-#!/usr/bin/perl
-$output = 1;
-while (<>) {
-	/^#include\b/   and map { local $/ = undef; open F, $_; my $s = <F>; $s =~ s/\A<\?php\s*|\s*\?>\z//; print $s; close F } glob $' or
-	/^#remove\b/    and $output = 0 or
-	/^#endremove\b/ and $output = 1 or
-	$output         and print;
-}

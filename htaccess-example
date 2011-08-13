@@ -1,0 +1,6 @@
+SetEnv DSN mysql:dbname=yutar
+SetEnv DBUSER yutar
+SetEnv DBPASS yutar
+RewriteEngine On
+RewriteRule ^attachment/([0-9]+)/(.+)$ attachment/$1-$2 [L]
+RewriteRule ^[^.]+$ index.php [L]
