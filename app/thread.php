@@ -29,8 +29,6 @@ if ($thread->attachment) {
     $size = @filesize(ROOT . "/www/attachments/$thread->tid-$thread->attachment");
 }
 ?>
-<script src="<?= u('thread') ?>.js"></script>
-
 <h2><?= $FORUM_NAME[$thread->fid] ?></h2>
 
 <div class=thread>

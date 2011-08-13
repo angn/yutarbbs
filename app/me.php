@@ -2,7 +2,7 @@
 
 if ($_POST) {
     if (isset($_POST['phone'])) {
-        update('users', array('updated_on' => (object)'NOW()') + $_POST, array('uid = ?', $_POST['uid']), 1);
+        update('users', array('updated_on' => now()) + $_POST, array('uid = ?', $_POST['uid']), 1);
         redirect(null);
 
     } elseif (isset($_POST['passwd'])) {

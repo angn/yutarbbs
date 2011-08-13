@@ -1,9 +1,9 @@
 <?php
 
+error_reporting(E_ALL ^ E_NOTICE);
+
 if ($_REQUEST['x'])
     ini_set('display_errors', 1);
-
-error_reporting(E_ALL ^ E_NOTICE);
 
 define('ROOT', dirname(__FILE__));
 
@@ -59,13 +59,18 @@ function fetchall($q)
             $rs->fetchAll(PDO::FETCH_OBJ) : array();
 }
 
+function now()
+{
+    return date('YmdHis');
+}
+
 function insert($t, $v)
 {
 	$k = implode(',', array_keys($v));
-	$v = implode(',', array_fill(0, count($v), '?'));
     $a = array_values($v);
+	$v = implode(',', array_fill(0, count($v), '?'));
 	$rs = db()->prepare("INSERT INTO $t ($k) VALUES ($v)");
-    return $rs->execute($a) ? $rs->rowCount() : 0;
+    return $rs->execute($a) ? db()->lastInsertId() : 0;
 }
 
 function update($t, $s, $w, $n = null)

@@ -26,7 +26,6 @@ if ($threads) {
         $info[$r->tid] = $r;
 }
 ?>
-<script src="<?= u('forum') ?>.js"></script>
 <h2><?= $FORUM_NAME[$fid] ?></h2>
 <div class=forum>
 

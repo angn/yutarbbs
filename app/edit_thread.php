@@ -3,11 +3,11 @@ if (requirelogin())
     return;
 
 if ($_POST) {
-    if (!preg_match('/\S/', $_POST['subject'])) {
+    if (preg_match('/\S/', $_POST['subject'])) {
         if (!$_POST['tid']) {
             unset($_POST['tid']);
             $tid = insert('threads', array(
-                    'created_at' => (object)'NOW()',
+                    'created_at' => now(),
                     'uid' => $my->uid
                 ) + $_POST + array('attachment' => strval($_FILES['attachment']['name'])));
         } else {
