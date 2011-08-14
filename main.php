@@ -10,12 +10,11 @@ define('ROOT', dirname(__FILE__));
 setlocale(LC_ALL, 'ko_KR.utf8', 'en_US.utf8', '');
 
 define('PLAIN', '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/=');
-define('CODED', 'RTnzpm4H0WiB9S3AfC8hZuvIrUgyG1MV-dc6Jl7kasKtoNE._D52wFOPbQjeqYxLX');
 
 function sess_write($data)
 {
 	setcookie('sess',
-		strtr(base64_encode(serialize($data)), PLAIN, CODED),
+		strtr(base64_encode(serialize($data)), PLAIN, $_SERVER['CODED']),
 		$data ? time() + ($data->persistent ? 1209600 : 1800) : 1,
 		'/');
 }
@@ -24,7 +23,7 @@ function sess_init()
 {
     if (isset($_COOKIE['sess'])) {
         $data = @unserialize(
-                base64_decode(strtr($_COOKIE['sess'], CODED, PLAIN)));
+                base64_decode(strtr($_COOKIE['sess'], $_SERVER['CODED'], PLAIN)));
         sess_write($data);
         return $data;
     }
