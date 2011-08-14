@@ -67,3 +67,9 @@ function follow1s(n, s) {
     location.hash = '#comment' + x;
     return false;
 }
+
+function validate(t) {
+    if (confirm('아 정말요?'))
+        location.href = t.href + '?y=1';
+    return false;
+}

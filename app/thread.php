@@ -74,7 +74,7 @@ if ($thread->attachment) {
     <span class=author><small><?= $m->year ?></small><?= h($m->name) ?></span>
     <span class=date><?= formattime($m->created) ?></span>
     <?php if ($my->uid == $m->uid): ?>
-    <a class=hid href="<?= u('delete_message', $m->mid) ?>" onclick="if (!confirm('아 정말요?')) return false; this.href += '?y'"><em>삭제</em></a>
+    <a class=hid href="<?= u('delete_message', $m->mid) ?>" onclick="return validate(this)"><em>삭제</em></a>
     <?php else: ?>
     <a class=hid href=# onclick="return add1s(<?php echo $n - $i ?>)">답글1</a>
     <?php endif ?>
