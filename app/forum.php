@@ -51,7 +51,7 @@ $t->updated = $info[$t->tid]->updated;
 </a></li><?php endforeach; endif ?>
 </ol>
 
-<form>
+<form onsubmit="location.href='<?= u('forum', $fid, '') ?>'+this.elements[0].value;return false">
 <p class=pages>
 
 <?php if (empty($keyword)): ?>
