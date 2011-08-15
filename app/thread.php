@@ -24,10 +24,9 @@ if ($_COOKIE['lasttid'] != $tid) {
 
 $thread = fetchone('tid, fid, subject, t.uid, year, name, phone, email, website, remark, message, UNIX_TIMESTAMP(created_at) created, attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', $tid) or notfound();
 $messages = fetchall('mid, message, uid, year, name, UNIX_TIMESTAMP(created_at) created FROM messages INNER JOIN users USING (uid) WHERE tid = ? ORDER BY created_at', $tid);
-if ($thread->attachment) {
-    $image = preg_match('/[.](jpe?g|gif|png|bmp)$/i', $thread->attachment);
-    $size = @filesize(ROOT . "/www/attachments/$thread->tid-$thread->attachment");
-}
+$path = ROOT . "/www/attachment/$thread->tid-$thread->attachment";
+if (is_readable($path) && is_file($path))
+    $size = filesize($path);
 ?>
 <h2><?= $FORUM_NAME[$thread->fid] ?></h2>
 
@@ -48,10 +47,10 @@ if ($thread->attachment) {
             <a href="<?= u('delete_thread', $thread->tid) ?>" onclick="return confirm('아 정말요?')">삭제</a>
         <?php endif ?>
 	</p>
-	<?php if ($thread->attachment): ?>
+	<?php if ($size): ?>
 		<blockquote class=attachment>
 			<a href="<?= u('attachment', $thread->tid, $thread->attachment) ?>"><?= h($thread->attachment) ?></a> <small>(<?= number_format($size >> 10) ?>KB)</small><br>
-            <?php if ($image): ?>
+            <?php if (preg_match('/[.](jpe?g|gif|png|bmp)$/i', $path)): ?>
                 <img src="<?= u('attachment', $thread->tid, $thread->attachment) ?>" alt="<?= h($thread->attachment) ?>">
             <?php endif ?>
 		</blockquote>

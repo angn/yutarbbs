@@ -20,7 +20,7 @@ if ($_POST) {
         }
         if ($tid) {
             if ($file = $_FILES['attachment'])
-                @move_uploaded_file($file['tmp_name'], ROOT . "/www/attachments/$tid-{$file['name']}");
+                @move_uploaded_file($file['tmp_name'], ROOT . "/www/attachment/$tid-{$file['name']}");
             redirect('thread', $tid);
         }
     }
