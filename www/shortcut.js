@@ -26,14 +26,17 @@ KEY.g = function f() {
         G = 1, setTimeout(function() { G = 0; }, 250);
 };
 
-var N = -1;
+if (!window.localStorage)
+    localStorage = {};
 
 function cursorby(d) {
     var c = document.getElementById('list');
     if (c) {
         var a = c.getElementsByTagName('a');
-        N = Math.max(0, Math.min(a.length - 1, N + d));
-        a[N].focus();
+        var n = parseInt(localStorage.N, 10) + d;
+        n = localStorage.N = Math.max(0, Math.min(a.length - 1, n || 0));
+        console.log(n);
+        a[n].focus();
     } else {
         scrollBy(0, d * 60);
     }
@@ -41,6 +44,7 @@ function cursorby(d) {
 
 KEY.j = function() { cursorby(1); };
 KEY.k = function() { cursorby(-1); };
+window.onload = function() { cursorby(0); };
 
 KEY.o = function() {
     if (document.activeElement.href)

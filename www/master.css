@@ -68,13 +68,13 @@ a {
 	text-decoration: none;
 }
 
-a:focus, a:active, a:hover {
+a:active, a:hover {
     outline: 0;
 	background-color: #224f9a;
 	color: #fff;
 }
 
-a:focus *, a:active *, a:hover * {
+a:active *, a:hover * {
     color: #fff;
 }
 
@@ -281,9 +281,16 @@ h3, thead td {
     color: #666;
 }
 
-.forum ol a:focus *,
 .forum ol a:hover * {
     color: #fff;
+}
+
+.forum ol a:focus:before {
+    position: absolute;
+    right: 50%;
+    margin-right: 404px;
+    content: '▶';
+    color: #000;
 }
 
 .forum .no {
@@ -306,7 +313,7 @@ h3, thead td {
     overflow: hidden;
     text-overflow: ellipsis;
     color: #224f9a;
-    /*letter-spacing: -0.15ex;*/
+    letter-spacing: -0.1ex;
 }
 
 .forum .author {
@@ -392,7 +399,7 @@ h3, thead td {
     white-space: pre-wrap;
     word-wrap: break-word;
 	line-height: 1.6;
-    /*letter-spacing: -0.15ex;*/
+    letter-spacing: -0.1ex;
     text-rendering: optimizeLegibility;
 }
 
@@ -400,7 +407,7 @@ h3, thead td {
     margin: 0;
     width: 95%;
     height: 20em;
-    /*letter-spacing: -0.1em;*/
+    letter-spacing: -0.1ex;
 }
 
 .thread .remark {
@@ -412,7 +419,6 @@ h3, thead td {
     line-height: 1.6;
 	font-size: 90%;
 	color: #999;
-    /*letter-spacing: -0.1ex;*/
     white-space: pre-wrap;
     word-wrap: break-word;
 }
@@ -517,7 +523,7 @@ h3, thead td {
     margin: 1em;
 }
 
-@media screen and (max-width: 799px) {
+@media only screen and (max-width: 799px) {
 
     html {
         -webkit-text-size-adjust: none;
