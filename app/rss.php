@@ -6,16 +6,16 @@ $rss = new SimpleXMLElement(
         '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"/>');
 $chan = $rss->addChild('channel');
 $chan->addChild('title', 'yutar.net');
-$chan->addChild('link', url());
-$chan->addChild('description', 'yutar.net');
+$chan->addChild('link', h(url()));
+$chan->addChild('description', 'yutar. the premium.');
 foreach ($threads as $t) {
     $item = $chan->addChild('item');
-    $item->addChild('title', "[{$FORUM_NAME[$t->fid]}] $t->subject");
-    $item->addChild('link', url('thread', $t->tid));
-    $item->addChild('description', nl2br(formattext($t->message)));
-	$item->addChild('author', "$t->year$t->name");
+    $item->addChild('title', h("[{$FORUM_NAME[$t->fid]}] $t->subject"));
+    $item->addChild('link', h(url('thread', $t->tid)));
+    $item->addChild('description', h(nl2br(formattext($t->message))));
+	$item->addChild('author', h("$t->year$t->name"));
 	$item->addChild('pubDate', date('r', $t->created));
-	//$item->addChild('category', $FORUM_NAME[$t->fid]);
+	$item->addChild('category', h($FORUM_NAME[$t->fid]));
 }
 
 header('Content-Type: application/rss+xml');
