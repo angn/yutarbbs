@@ -7,8 +7,7 @@ $updated = is_forum_updated();
 <meta name="verify-v1" content="Vk1vAsUQPxHe0RgJW6YfJN3njmjm3VjxLPKADaq9SfA=" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>yutar.net</title>
-<link rel=stylesheet type=text/css media=screen href="<?= u('master') ?>.css">
-<link rel=stylesheet type=text/css media="only screen and (max-width: 800px)" href="<?= u('mobile') ?>.css">
+<link rel=stylesheet type=text/css href="<?= u('master') ?>.css">
 <meta name=viewport content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <script src="<?= u('shortcut') ?>.js"></script>
 </head>
