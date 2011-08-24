@@ -55,7 +55,7 @@ em {
 	color: #f30;
 }
 
-a:hover em {
+a:hover > em:only-child {
     background: #f30;
 }
 
