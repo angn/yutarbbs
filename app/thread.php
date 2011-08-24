@@ -57,10 +57,10 @@ if (is_readable($path) && is_file($path))
 	<?php endif ?>
 	<div class="article"><?= formattext($thread->message) ?></div>
 	<p class="remark"><strong><?= $thread->year ?><?= h($thread->name) ?></strong>
-		<?php if ($thread->phone): ?>☎ <?= formatphone($thread->phone) ?><br><?php endif ?>
-		<?php if ($thread->email): ?><a href="mailto:<?= h($thread->email) ?>"><?= h($thread->email) ?></a><br><?php endif ?>
-		<?php if ($thread->website): ?><a target="_blank" href="<?= h($thread->website) ?>"><?= h($thread->website) ?></a><br><?php endif ?>
-		<?= h($thread->remark) ?></p>
+<?php   if ($thread->phone): ?>☎ <?= formatphone($thread->phone) ?><br><?php endif;
+		if ($thread->email): ?><a href="mailto:<?= h($thread->email) ?>"><?= h($thread->email) ?></a><br><?php endif;
+		if ($thread->website): ?><a target="_blank" href="<?= h($thread->website) ?>"><?= h($thread->website) ?></a><br><?php endif;
+		echo h($thread->remark) ?></p>
 
 <h4>“...!”</h4>
 <dl>
