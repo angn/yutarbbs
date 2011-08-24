@@ -35,7 +35,6 @@ function cursorby(d) {
         var a = c.getElementsByTagName('a');
         var n = parseInt(localStorage.N, 10) + d;
         n = localStorage.N = Math.max(0, Math.min(a.length - 1, n || 0));
-        console.log(n);
         a[n].focus();
     } else {
         scrollBy(0, d * 60);
