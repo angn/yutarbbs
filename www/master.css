@@ -449,6 +449,11 @@ h3, thead td {
     position: absolute;
     right: 1ex;
     top: 0.5ex;
+    background: #eee;
+}
+
+.thread dl a.hid:hover {
+    background: #224f9a;
 }
 
 .thread dl .info:hover .hid {
