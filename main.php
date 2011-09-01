@@ -240,19 +240,24 @@ function mathtex($m)
 
 function formattext($s)
 {
-    $a = preg_split('#(<[A-Z]+[^>]*>|</[A-Z]+>)#is', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
-    array_walk($a, '_formattexteach');
-    $s = implode($a);
+    $a = preg_split('#(<[A-Z]+[^>]*>|</[A-Z]+[^>]*>)#is', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $s = implode(array_map('_formattexteach', $a));
     $s = preg_replace_callback('#<tex>(.+?)</tex>#s', 'mathtex', $s);
 	return "<p>$s</p>";
 }
 
-function _formattexteach(&$s) {
-    if (preg_match('#^(?:<[A-Z]+[^>]*>|</[A-Z]+>)$#is', $s))
-    	return;
-	$s = htmlspecialchars($s);
-	$s = preg_replace('#\bhttps?://[^\s<]+#', '<a target="_blank" href="$0">$0</a>', $s);
-	$s = preg_replace('#\b[\w.]+@[\w.]+\b#', '<a target="_blank" href="mailto:$0">$0</a>', $s);
+function _formattexteach($s) {
+    if (preg_match('#^<[A-Z/].*>$#is', $s))
+    	return $s;
+    return preg_replace_callback('#\bhttps?://[^\s<]+|\b()[\w.]+@[\w.]+\b#',
+            '_formattexturl', htmlspecialchars($s));
+}
+
+function _formattexturl($m) {
+    $url = $m[0];
+    $href = ($m[1] === '' ? 'mailto:' : '') . $url;
+    $label = preg_replace('/(?<=[?#]).+/', '&hellip;', $m[0]);
+    return "<a target=\"_blank\" href=\"$href\" title=\"$url\">$label</a>";
 }
 
 $args = array_slice(explode('/', rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/')), 1)
