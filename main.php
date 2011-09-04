@@ -202,24 +202,18 @@ function formatdate($n)
 	static $A;
 	if (!$A) {
 		$A = array(
-            0                           => array(0, 'date', "'y n/j"),
-            strtotime('0:0 1/1 -1year') => array(0, 'date', '작년 n/j' ),
-            mktime(0, 0, 0, 1, 1)       => array(0, 'date', 'n/j' ),
-            strtotime('0:0 -2day')      => array(0, 'sprintf', '그제'),
-            strtotime('0:0 -1day')      => array(0, 'sprintf', '어제'),
-            mktime(0, 0, 0)             => array(1, 'sprintf', '오늘'),
-            strtotime('-1min')          => array(1, 'sprintf', '방금'),
+            mktime(0, 0, 0, 1, 1)  => array('date', 'n/j' ),
+            strtotime('0:0 -2day') => array('sprintf', '그제'),
+            strtotime('0:0 -1day') => array('sprintf', '어제'),
+            mktime(0, 0, 0)        => array('sprintf', '<em>오늘</em>'),
+            strtotime('-5min')     => array('sprintf', '<em>방금</em>'),
         );
         krsort($A, SORT_NUMERIC);
     }
-	foreach ($A as $k => $v) {
-		if ($n >= $k) {
-            // echo "<!-- DEBUG: $n $k "; var_dump($v); echo " -->";
-			$s = $v[1]($v[2], $n);
-			return $v[0] ? "<em>$s</em>" : $s;
-		}
-	}
-	return '';
+	foreach ($A as $k => $v)
+		if ($n >= $k)
+			return $v[0]($v[1], $n);
+	return date("'y n/j", $n);
 }
 
 function formattime($n)
