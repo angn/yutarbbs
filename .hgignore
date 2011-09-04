@@ -1,3 +1,4 @@
 www/.htaccess
 www/attachment/*
 www/emo/*
+conf.php

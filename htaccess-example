@@ -1,10 +1,4 @@
-# PDO DSN, username, password
-SetEnv DSN mysql:dbname=yutar
-SetEnv DBUSER yutar
-SetEnv DBPASS yutar
-
-# Session encoding; shuffle the text!
-SetEnv CODED 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._
+## An example of www/.htaccess
 
 # URL transformation
 RewriteEngine On

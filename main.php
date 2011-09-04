@@ -11,19 +11,23 @@ setlocale(LC_ALL, 'ko_KR.utf8', 'en_US.utf8', '');
 
 define('PLAIN', '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/=');
 
+require_once ROOT . '/conf.php';
+
 function sess_write($data)
 {
+    global $conf;
 	setcookie('sess',
-		strtr(base64_encode(serialize($data)), PLAIN, $_SERVER['CODED']),
+		strtr(base64_encode(serialize($data)), PLAIN, $conf['CODED']),
 		$data ? time() + ($data->persistent ? 1209600 : 1800) : 1,
 		'/');
 }
 
 function sess_init()
 {
+    global $conf;
     if (isset($_COOKIE['sess'])) {
         $data = @unserialize(
-                base64_decode(strtr($_COOKIE['sess'], $_SERVER['CODED'], PLAIN)));
+                base64_decode(strtr($_COOKIE['sess'], $conf['CODED'], PLAIN)));
         sess_write($data);
         return $data;
     }
@@ -37,9 +41,10 @@ function alert($s)
 
 function db()
 {
+    global $conf;
 	static $c;
     if (!$c)
-        $c = new PDO($_SERVER['DSN'], $_SERVER['DBUSER'], $_SERVER['DBPASS']);
+        $c = new PDO($conf['DSN'], $conf['DBUSER'], $conf['DBPASS']);
     return $c;
 }
 
@@ -155,8 +160,6 @@ function hashpasswd($s)
     return md5("gkfd{$s}gkfd");
 }
 
-$FORUM_NAME = array('', '공지', '자유게시판', '학술', 'PS', '유타닷넷', '운영', '소모임', '질문·토론', '진로', '테크');
-
 function is_forum_updated()
 {
     $a = array();
@@ -254,13 +257,21 @@ function _formattexturl($m) {
     return "<a target=\"_blank\" href=\"$href\" title=\"$url\">$label</a>";
 }
 
-$args = array_slice(explode('/', rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/')), 1)
-    + array('index');
+$FORUM_NAME = array('', '공지', '자유게시판', '학술', 'PS', '유타닷넷', '운영', '소모임', '질문·토론', '진로', '테크');
 
 $my = sess_init();
+
+$CLI = isset($argv);
+$uri = $CLI ? $argv[1] : strtok($_SERVER['REQUEST_URI'], '?');
+$args = array_slice(explode('/', rtrim($uri, '/')), 1)
+    + array('index');
 
 ob_start();
 @include ROOT . '/app/' . array_shift($args) . '.php';
 $body = ob_get_clean() or notfound();
 
-require ROOT . '/app/layout.php';
+if ($CLI)
+    echo $body;
+else
+    require ROOT . '/app/layout.php';
+

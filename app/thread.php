@@ -6,12 +6,12 @@ list($tid, $mod) = $args;
 
 switch ($mod) {
 case 'next':
-    $thread = fetchone('b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid<a.tid ORDER BY b.tid DESC LIMIT 1', $tid) or notfound();
+    $thread = fetchone('b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid<a.tid ORDER BY b.tid DESC LIMIT 1', $tid);
     if ($thread)
         redirect('thread', $thread->tid);
     nocontent();
 case 'prev':
-    $thread = fetchone('b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid>a.tid ORDER BY b.tid LIMIT 1', $tid) or notfound();
+    $thread = fetchone('b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid>a.tid ORDER BY b.tid LIMIT 1', $tid);
     if ($thread)
         redirect('thread', $thread->tid);
     nocontent();
@@ -70,7 +70,7 @@ if (is_readable($path) && is_file($path))
             $m->message);
 ?>
 <dt class=info>
-    <span class=author><small><?= $m->year ?></small><?= h($m->name) ?></span>
+    <span class=author><small><?= $m->year ?></small><?= $m->name == '김효승' ? '김효승이<sup>UTF-8</sup>': h($m->name) ?></span>
     <span class=date><?= formattime($m->created) ?></span>
     <?php if ($my->uid == $m->uid): ?>
     <a class=hid href="<?= u('delete_message', $m->mid) ?>" onclick="return validate(this)"><em>삭제</em></a>
