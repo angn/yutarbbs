@@ -428,6 +428,7 @@ h3, thead td {
 .thread .article {
 	margin: 1ex 12px;
     white-space: pre-wrap;
+    *white-space: pre;
     word-wrap: break-word;
 	line-height: 1.6;
     letter-spacing: -0.1ex;
@@ -451,6 +452,7 @@ h3, thead td {
 	font-size: 90%;
 	color: #999;
     white-space: pre-wrap;
+    *white-space: pre;
     word-wrap: break-word;
 }
 
@@ -520,6 +522,7 @@ h3, thead td {
 
 .users td:first-child + td + td + td {
     white-space: pre-wrap;
+    *white-space: pre;
     word-wrap: break-word;
 }
 
