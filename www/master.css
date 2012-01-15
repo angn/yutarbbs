@@ -436,7 +436,8 @@ h3, thead td {
 }
 
 .thread textarea {
-    margin: 0;
+    display: block;
+    margin: 0.5ex 0;
     width: 95%;
     height: 20em;
     letter-spacing: -0.1ex;
@@ -508,7 +509,19 @@ h3, thead td {
 }
 
 .thread dl textarea {
-    height: 8em;
+    height: 2em;
+}
+
+.thread dl .lazyinit textarea {
+    height: 20em;
+}
+
+.thread dl .lazy {
+    display: none;
+}
+
+.thread dl .lazyinit .lazy {
+    display: block;
 }
 
 .thread input[type=submit] {

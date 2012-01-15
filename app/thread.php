@@ -87,9 +87,9 @@ if (is_readable($path) && is_file($path))
 <dd>
     <form name=comment method=post action="<?= u('message') ?>">
         <input type=hidden name=tid value="<?= $thread->tid ?>">
-        <p><textarea name=message cols=40 rows=5 accesskey=m></textarea></p>
-        <p><small>&lt;tex&gt;\code&lt;/tex&gt;</small></p>
-        <p><input type=submit accesskey=s value="쓰기"></p>
+        <p><textarea name=message cols=40 rows=5 accesskey=m placeholder="댓글 쓰기" onfocus="this.form.className='lazyinit';scrollBy(0,999)"></textarea></p>
+        <p class=lazy><small>&lt;tex&gt;\code&lt;/tex&gt;</small></p>
+        <p class=lazy><input type=submit accesskey=s value="쓰기"></p>
     </form>
 </dl>
 

@@ -39,8 +39,7 @@ if ($tid == 'forum') {
 <div class=thread>
 <form method=post enctype=multipart/form-data>
 <h3><input type=text name=subject size=80 value="<?= h($thread->subject) ?>" autofocus></h3>
-<div class=article><textarea name=message cols=80 rows=20><?= h($thread->message) ?></textarea>
-<small>&lt;tex&gt;\code&lt;/tex&gt;</small>
+<div class=article><textarea name=message cols=80 rows=20><?= h($thread->message) ?></textarea><small>&lt;tex&gt;\code&lt;/tex&gt;</small>
 <input type=file name=attachment size=30>
 <input type=submit accesskey=s value="작성">
 </div>
