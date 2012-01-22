@@ -118,15 +118,16 @@ del {
 }
 
 .container {
+    overflow: hidden;
     clear: both;
 	width: 800px;
 	min-height: 500px;
     _height: 600px;
-    margin: 0 auto;
-    padding: 1px 0;
-    -webkit-border-radius: 0 0 1ex 1ex;
-    -moz-border-radius: 0 0 1ex 1ex;
-    border-radius: 0 0 1ex 1ex;
+    margin: 10px auto 0;
+    padding: 0 0 1px;
+    -webkit-border-radius: 1ex;
+    -moz-border-radius: 1ex;
+    border-radius: 1ex;
     background: #fff;
     -webkit-box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     -moz-box-shadow: 0 2px 8px rgba(0,0,0,0.5);
@@ -136,7 +137,6 @@ del {
 h1 {
     overflow: hidden;
     width: 800px;
-    margin: 10px auto 0;
     font-family: Arial, sans-serif;
     font-weight: 100;
 }
@@ -146,9 +146,6 @@ h1 a {
 	display: block;
 	width: 800px;
 	height: 50px;
-    -webkit-border-radius: 0.3ex 0.3ex 0 0;
-    -moz-border-radius: 0.3ex 0.3ex 0 0;
-    border-radius: 0.3ex 0.3ex 0 0;
 	background: #224f9a no-repeat 724px 0 url(yonsei.jpg);
     color: #fff;
 }

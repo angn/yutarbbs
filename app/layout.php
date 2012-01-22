@@ -12,12 +12,12 @@ $updated = is_forum_updated();
 <script src="<?= u('shortcut') ?>.js"></script>
 </head>
 <body>
+<div class=container>
+
 <h1><a href="<?= u() ?>">
     <big>yutar. the premium.</big>
     <small>Yonsei Informatics Specialists Since 1998</small>
 </a></h1>
-
-<div class=container>
 
 <?php if ($my): ?>
 <p class=identity>
