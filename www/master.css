@@ -50,7 +50,7 @@ body {
 }
 
 body, input, textarea, button, select {
-    font-family: Malgun Gothic, 맑은 고딕, Dotum, 돋움, sans-serif;
+    font-family: 나눔고딕, Malgun Gothic, 맑은 고딕, Dotum, 돋움, sans-serif;
 }
 
 input, textarea, button, select {
@@ -220,7 +220,7 @@ h1 small {
     overflow: hidden;
 	padding: 1ex 12px;
 	white-space: nowrap;
-	font-weight: bolder;
+	font-weight: 700;
     color: #ccc;
 }
 
@@ -289,7 +289,7 @@ h3, thead td {
     background-image: linear-gradient(#cad5df, #ebeff3);
     text-shadow: 0 1px 0 #eef4f8;
 	font-size: 100%;
-    font-weight: bolder;
+    font-weight: 700;
     color: #456;
 }
 
@@ -365,7 +365,7 @@ h3, thead td {
 }
 
 .forum .replies {
-    font-weight: bolder;
+    font-weight: 700;
     color: #333;
 }
 
@@ -402,7 +402,7 @@ h3, thead td {
 }
 
 .thread .author {
-    font-weight: bolder;
+    font-weight: 700;
     color: #369;
 }
 
