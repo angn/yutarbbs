@@ -40,8 +40,6 @@ $updated = is_forum_updated();
 
 </div>
 
-<address>&sect;</address>
-
 </body>
 </html>
 
