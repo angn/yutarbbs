@@ -177,11 +177,13 @@ h1 big {
     -ms-transform-origin: 15% 30%;
     -o-transform-origin: 15% 30%;
     transform-origin: 15% 30%;
+    /*
     -webkit-transition: -webkit-transform 0.3s ease-out;
     -moz-transition: -moz-transform 0.3s ease-out;
     -ms-transition: -ms-transform 0.3s ease-out;
     -o-transition: -o-transform 0.3s ease-out;
     transition: transform 0.3s ease-out;
+    */
 }
 
 h1 a:hover big {
@@ -640,6 +642,8 @@ h3, thead td {
     .container {
         margin: 0;
         width: auto;
+        -webkit-border-radius: 0;
+        border-radius: 0;
         -webkit-box-shadow: none;
         box-shadow: none;
     }
