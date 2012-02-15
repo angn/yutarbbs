@@ -253,7 +253,7 @@ function _formattexteach($s) {
 function _formattexturl($m) {
     $url = $m[0];
     $href = ($m[1] === '' ? 'mailto:' : '') . $url;
-    $label = preg_replace('/(?<=[?#]).+/', '&hellip;', $m[0]);
+    $label = iconv('utf8', 'utf8//translit', rawurldecode($m[0]));
     return "<a target=\"_blank\" href=\"$href\" title=\"$url\">$label</a>";
 }
 
