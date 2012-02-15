@@ -254,7 +254,7 @@ function _formattexturl($m) {
     $url = $m[0];
     $href = ($m[1] === '' ? 'mailto:' : '') . $url;
     $label = iconv('utf8', 'utf8//translit', rawurldecode($m[0]));
-    return "<a target=\"_blank\" href=\"$href\" title=\"$url\">$label</a>";
+    return "<a target=\"_blank\" href=\"$href\">$label</a>";
 }
 
 $FORUM_NAME = array('', '공지', '자유게시판', '학술', 'PS', '유타닷넷', '운영', '소모임', '질문·토론', '진로', '테크');
