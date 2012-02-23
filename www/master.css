@@ -458,6 +458,22 @@ h3, thead td {
     word-wrap: break-word;
 }
 
+a.twit:before {
+    content: '';
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: -3px;
+    width: 16px;
+    height: 16px;
+    background: no-repeat
+        url(https://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png);
+}
+
+a.twit:hover:before {
+    background-image:
+        url(https://si0.twimg.com/images/dev/cms/intents/bird/bird_gray/bird_16_gray.png);
+}
+
 .thread dl .info {
     float: left;
     position: relative;
@@ -809,7 +825,7 @@ h3, thead td {
     }
 
     .users br {
-        display: none;
+        content: ' ';
     }
 
     .users td + td + td + td {

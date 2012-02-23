@@ -2,7 +2,7 @@
 if (requirelogin())
     return;
 
-$users = fetchall('year, name, email, phone, website, remark FROM users ORDER BY year DESC, name');
+$users = fetchall('year, name, email, phone, remark FROM users ORDER BY year DESC, name');
 ?>
 <h2>회원명부</h2>
 
@@ -21,8 +21,7 @@ $users = fetchall('year, name, email, phone, website, remark FROM users ORDER BY
 <td><?= h($u->name) ?>
 <td><?= h(formatphone($u->phone)) ?><br>
     <a class=email href="mailto:<?= h($u->email) ?>"><?= h($u->email) ?></a>
-<td><?php if ($u->website): ?><a href="<?= h(strncmp($u->website, 'http://', 7) ? "http://$u->website" : $u->website) ?>"><?= h($u->website) ?></a><br><?php endif ?>
-<?= h($u->remark) ?></td>
+<td><?= formattext($u->remark) ?></td>
 <?php endforeach ?>
 
 </table>

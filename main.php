@@ -239,22 +239,34 @@ function formattext($s)
 {
     $a = preg_split('#(<[A-Z]+[^>]*>|</[A-Z]+[^>]*>)#is', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
     $s = implode(array_map('_formattexteach', $a));
-    $s = preg_replace_callback('#<tex>(.+?)</tex>#s', 'mathtex', $s);
-	return "<p>$s</p>";
+    return preg_replace_callback('#<tex>(.+?)</tex>#s', 'mathtex', $s);
 }
 
 function _formattexteach($s) {
     if (preg_match('#^<[A-Z/].*>$#is', $s))
     	return $s;
-    return preg_replace_callback('#\bhttps?://[^\s<]+|\b()[\w.]+@[\w.]+\b#',
+    return preg_replace_callback(
+            '#\b(https?://[^\s<]+)|([\w.]+@[\w.]+)|(?<!\w)@([\w]+)#',
             '_formattexturl', htmlspecialchars($s));
 }
 
 function _formattexturl($m) {
-    $url = $m[0];
-    $href = ($m[1] === '' ? 'mailto:' : '') . $url;
-    $label = iconv('utf8', 'utf8//translit', rawurldecode($m[0]));
-    return "<a target=\"_blank\" href=\"$href\">$label</a>";
+    list(, $website, $email, $twitter) = $m;
+    $style = '';
+    if ($website) { // website
+        $href = $website;
+        $label = iconv('utf8', 'utf8//translit', rawurldecode($website));
+    } else if ($email) { // email
+        $href = "mailto:$email";
+        $label = $email;
+    } else if ($twitter) { // twitter
+        $style = 'twit';
+        $href = "https://twitter.com/$twitter";
+        $label = "@$twitter";
+    } else {
+        return $m[0];
+    }
+    return "<a target=\"_blank\" href=\"$href\" class=\"$style\">$label</a>";
 }
 
 $FORUM_NAME = array('', '공지', '자유게시판', '학술', 'PS', '유타닷넷', '운영', '소모임', '질문·토론', '진로', '테크');

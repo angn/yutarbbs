@@ -22,7 +22,7 @@ if ($_COOKIE['lasttid'] != $tid) {
     setcookie('lasttid', $tid);
 }
 
-$thread = fetchone('tid, fid, subject, t.uid, year, name, phone, email, website, remark, message, UNIX_TIMESTAMP(created_at) created, attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', $tid) or notfound();
+$thread = fetchone('tid, fid, subject, t.uid, year, name, phone, email, remark, message, UNIX_TIMESTAMP(created_at) created, attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', $tid) or notfound();
 $messages = fetchall('mid, message, uid, year, name, UNIX_TIMESTAMP(created_at) created FROM messages INNER JOIN users USING (uid) WHERE tid = ? ORDER BY created_at', $tid);
 $path = ROOT . "/www/attachment/$thread->tid-$thread->attachment";
 if (is_readable($path) && is_file($path))
@@ -55,12 +55,11 @@ if (is_readable($path) && is_file($path))
             <?php endif ?>
 		</blockquote>
 	<?php endif ?>
-	<div class="article"><?= formattext($thread->message) ?></div>
+	<div class="article"><p><?= formattext($thread->message) ?></p></div>
 	<p class="remark"><strong><?= $thread->year ?><?= h($thread->name) ?></strong>
 <?php   if ($thread->phone): ?>☎ <?= formatphone($thread->phone) ?><br><?php endif;
 		if ($thread->email): ?><a href="mailto:<?= h($thread->email) ?>"><?= h($thread->email) ?></a><br><?php endif;
-		if ($thread->website): ?><a target="_blank" href="<?= h($thread->website) ?>"><?= h($thread->website) ?></a><br><?php endif;
-		echo h($thread->remark) ?></p>
+		echo formattext($thread->remark) ?></p>
 
 <h4>“...!”</h4>
 <dl>
@@ -78,7 +77,7 @@ if (is_readable($path) && is_file($path))
     <a class=hid href=# onclick="return add1s(<?php echo $n - $i ?>)">답글1</a>
     <?php endif ?>
 </dt>
-<dd id="comment<?php echo $i ?>" class=article><?= replace_emoticons(formattext($m->message)) ?></dd>
+<dd id="comment<?php echo $i ?>" class=article><p><?= replace_emoticons(formattext($m->message)) ?></p></dd>
 <?php endforeach ?>
 
 <dt class=info>

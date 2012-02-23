@@ -31,7 +31,6 @@ CREATE TABLE `users` (
   `year` year(2) NOT NULL DEFAULT '00',
   `phone` char(31) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `email` char(63) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  `website` char(31) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `remark` char(255) NOT NULL DEFAULT '',
   `updated_on` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`uid`),

@@ -17,7 +17,7 @@ if ($my)
 <?php if ($notice): ?>
 <div class=thread>
 <h3><?= h($notice->subject) ?></h3>
-<div class=article><?= formattext($notice->message) ?></div>
+<div class=article><p><?= formattext($notice->message) ?></p></div>
 </div>
 <?php endif ?>
 
