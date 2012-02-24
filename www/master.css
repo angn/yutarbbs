@@ -668,6 +668,10 @@ a.twit:hover:before {
         display: none;
     }
 
+    body:after {
+        content: '';
+    }
+
     h2 {
         margin: 0;
         border-bottom: 1px solid #248;
