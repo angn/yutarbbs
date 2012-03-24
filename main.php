@@ -210,13 +210,14 @@ function formatdate($n)
             strtotime('0:0 -1day') => array('sprintf', '어제'),
             mktime(0, 0, 0)        => array('sprintf', '<em>오늘</em>'),
             strtotime('-5min')     => array('sprintf', '<em>방금</em>'),
+            1                      => array('date', "'y n/j"),
         );
         krsort($A, SORT_NUMERIC);
     }
 	foreach ($A as $k => $v)
 		if ($n >= $k)
 			return $v[0]($v[1], $n);
-	return date("'y n/j", $n);
+	return '?';
 }
 
 function formattime($n)
