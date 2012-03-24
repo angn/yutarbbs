@@ -1,7 +1,7 @@
 <?php
 
 if ($_POST) {
-    $user = fetchone('uid, year, name, userid, updated_on + INTERVAL 3 MONTH < NOW() outdated FROM users WHERE userid = ? AND passwd = ? LIMIT 1', $_POST['userid'], hashpasswd($_POST['passwd']));
+    $user = fetchone('uid, year, name, userid, IFNULL(updated_on + INTERVAL 3 MONTH, 0) < NOW() outdated FROM users WHERE userid = ? AND passwd = ? LIMIT 1', $_POST['userid'], hashpasswd($_POST['passwd']));
     if ($user) {
         $my = (object)array();
         foreach ((array)$user as $k => $v)
