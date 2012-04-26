@@ -403,6 +403,7 @@ h3, thead td {
 }
 
 .thread .author {
+    white-space: nowrap;
     font-weight: 700;
     color: #369;
 }
@@ -477,7 +478,7 @@ a.twit:hover:before {
 .thread dl .info {
     float: left;
     position: relative;
-    width: 95px;
+    width: 105px;
     padding: 0.5ex 12px;
     -webkit-border-radius: 0 1ex 1ex 0;
     -moz-border-radius: 0 1ex 1ex 0;
