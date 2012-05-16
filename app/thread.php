@@ -67,9 +67,13 @@ if (is_readable($path) && is_file($path))
     $m->message = preg_replace('/^(1{3,})(?=\s)/s',
             '<a href="#" onclick="return follow1s(' . $i . ',\'$1\')">$1</a>',
             $m->message);
+    $namemap = array(
+        '김효승' => '김효승이<sup>UTF-8</sup>',
+        '구종만' => "<a href=\"http://www.yutar.net/thread/6570\" style=\"font-family:Arial Narrow,sans-serif;font-weight:100\"> Koo's open mind</a>",
+    );
 ?>
 <dt class=info>
-    <span class=author><small><?= $m->year ?></small><?= $m->name == '김효승' ? '김효승이<sup>UTF-8</sup>': h($m->name) ?></span>
+    <span class=author><small><?= $m->year ?></small><?= $namemap[$m->name] ? $namemap[$m->name] : h($m->name) ?></span>
     <span class=date><?= formattime($m->created) ?></span>
     <?php if ($my->uid == $m->uid): ?>
     <a class=hid href="<?= u('delete_message', $m->mid) ?>" onclick="return validate(this)"><em>삭제</em></a>

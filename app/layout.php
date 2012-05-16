@@ -39,6 +39,7 @@ $updated = is_forum_updated();
 <?= $body ?>
 
 </div>
+<address><a href="http://code.google.com/p/yutarbbs/">http://code.google.com/p/yutarbbs/</a></address>
 
 </body>
 </html>
