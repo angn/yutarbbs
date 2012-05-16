@@ -86,6 +86,10 @@ em {
 	color: #f30;
 }
 
+abbr {
+    border-bottom: 1px dashed gray;
+}
+
 a:hover > em:only-child {
     background: #f30;
 }

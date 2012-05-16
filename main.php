@@ -243,12 +243,37 @@ function formattext($s)
     return preg_replace_callback('#<tex>(.+?)</tex>#s', 'mathtex', $s);
 }
 
+$HANGUL_FIRST = array_flip(str_split('rRseEfaqQtTdwWczxvg'));
+$HANGUL_SECOND = array_flip(explode(',', 'k,o,i,O,j,p,u,P,h,hk,ho,hl,y,n,nj,np,nl,b,m,ml,l'));
+$HANGUL_THIRD = array_flip(explode(',', ',r,R,rt,s,sw,sg,e,f,fr,fa,fq,ft,fx,fv,fg,a,q,qt,t,T,d,w,c,z,x,v,g'));
+
+function _formattexthangulletter($m) {
+    global $HANGUL_FIRST;
+    global $HANGUL_SECOND;
+    global $HANGUL_THIRD;
+    list(, $first, $second, $third) = $m;
+    $code = 0xAC00;
+    $code += $HANGUL_FIRST[$first] * count($HANGUL_SECOND) * count($HANGUL_THIRD);
+    $code += $HANGUL_SECOND[$second] * count($HANGUL_THIRD);
+    $code += $HANGUL_THIRD[$third];
+    return "&#$code;";
+}
+
+function _formattexthangulwords($m) {
+    list($s) = $m;
+    $s = preg_replace_callback('/([qwertasdfgzxcvQWERT])([yuiophjklbnmOP]+)([qwertasdfgzxcvQWERT]{0,2})(?![yuiophjklbnmOP])/', '_formattexthangulletter', $s);
+    return "<abbr title=\"$s\">{$m[0]}</abbr>";
+}
+
 function _formattexteach($s) {
     if (preg_match('#^<[A-Z/].*>$#is', $s))
     	return $s;
+    $s =  preg_replace_callback(
+            '/[a-zQWERTOP\s]+?[bcdfghjklmnpqrstvwxzQWRTP]{4}(?>[a-zQWERTOP\s]+)/',
+            '_formattexthangulwords', htmlspecialchars($s));
     return preg_replace_callback(
             '#\b(https?://[^\s<]+)|([\w.]+@[\w.]+)|(?<!\w)@([\w]+)#',
-            '_formattexturl', htmlspecialchars($s));
+            '_formattexturl', $s);
 }
 
 function _formattexturl($m) {
