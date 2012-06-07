@@ -259,26 +259,26 @@ function _formattexthangulletter($m) {
     return "&#$code;";
 }
 
-function _formattexthangulwords($m) {
-    list($s) = $m;
-    $s = preg_replace_callback('/([qwertasdfgzxcvQWERT])([yuiophjklbnmOP]+)([qwertasdfgzxcvQWERT]{0,2})(?![yuiophjklbnmOP])/', '_formattexthangulletter', $s);
-    return "<abbr title=\"$s\">{$m[0]}</abbr>";
+function _formattexthangulwords($s) {
+    $t = preg_replace_callback('/([qwertasdfgzxcvQWERT])([yuiophjklbnmOP]+)([qwertasdfgzxcvQWERT]{0,2})(?![yuiophjklbnmOP])/', '_formattexthangulletter', $s);
+    return "<abbr title=\"$t\">$s</abbr>";
 }
 
 function _formattexteach($s) {
     if (preg_match('#^<[A-Z/].*>$#is', $s))
     	return $s;
-    $s =  preg_replace_callback(
-            '/[a-zQWERTOP\s]+?[bcdfghjklmnpqrstvwxzQWRTP]{4}(?>[a-zQWERTOP\s]+)/',
-            '_formattexthangulwords', htmlspecialchars($s));
     return preg_replace_callback(
-            '#\b(https?://[^\s<]+)|([\w.]+@[\w.]+)|(?<!\w)@([\w]+)#',
-            '_formattexturl', $s);
+            '#\b(https?://[^\s<]+)|([\w.]+@[\w.]+)|(?<!\w)@([\w]+)|([a-zQWERTOP\s]+?[bcdfghjklmnpqrstvwxzQWRTP]{4}(?>[a-zQWERTOP\s]+))#',
+            '_formattexturl', htmlspecialchars($s));
 }
 
 function _formattexturl($m) {
-    list(, $website, $email, $twitter) = $m;
+    list(, $website, $email, $twitter, $hangul) = $m;
     $style = '';
+    if ($hangul) {
+        // korean in english keyboard (c.f. 7969)
+        return _formattexthangulwords($hangul);
+    }
     if ($website) { // website
         $href = $website;
         $label = iconv('utf8', 'utf8//translit', rawurldecode($website));
