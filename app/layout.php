@@ -8,7 +8,7 @@ $updated = is_forum_updated();
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>yutar.net</title>
 <link rel=stylesheet type=text/css href="<?= u('master') ?>.css">
-<meta name=viewport content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name=viewport content="initial-scale=1.0,minimum-scale=1.0">
 <script src="<?= u('shortcut') ?>.js"></script>
 </head>
 <body>
