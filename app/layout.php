@@ -31,8 +31,7 @@ $updated = is_forum_updated();
 <a accesskey="<?= $i ?>" href="<?= u('forum', $e) ?>"><?= $FORUM_NAME[$e] ?><?= $updated[$e] ?></a> · 
 <?php endforeach ?>
 <a accesskey=9 class=fade href="<?= u('users') ?>">회원명부</a> · 
-<a accesskey=0 class="fade minor" href="<?= u('emoticons') ?>">이모티콘</a> · 
-<a class="fade minor" href="ftp://jingyi.yutar.net/">징이</a>
+<a accesskey=0 class="fade minor" href="<?= u('emoticons') ?>">이모티콘</a>
 </p>
 <?php endif ?>
 
