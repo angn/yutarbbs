@@ -44,7 +44,7 @@ body {
     background-image: url(noise.png), -moz-linear-gradient(#ccc, #eee);
     background-image: url(noise.png), -ms-linear-gradient(#ccc, #eee);
     background-image: url(noise.png), -o-linear-gradient(#ccc, #eee);
-    background-image: url(noise.png), linear-gradient(#ccc, #eee);
+    background-image: url(noise.png#), linear-gradient(#ccc, #eee);
 	color: #000;
 	font-size: 83%;
 }
