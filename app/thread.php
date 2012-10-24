@@ -69,7 +69,7 @@ if (is_readable($path) && is_file($path))
             $m->message);
     $namemap = array(
         '김효승' => '김효승이<sup>UTF-8</sup>',
-        '구종만' => "<a href=\"http://www.yutar.net/thread/6570\" style=\"font-family:Arial Narrow,sans-serif;font-weight:100\"> Koo's open mind</a>",
+        '구종만' => "<a href=\"http://www.yutar.net/thread/6570\" style=\"font-family:Arial Narrow,Arial,sans-serif;font-stretch:condensed;font-weight:400\"> Koo's open mind</a>",
     );
 ?>
 <dt class=info>
