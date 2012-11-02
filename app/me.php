@@ -31,7 +31,7 @@ $user = fetchone('uid, userid, year, name, email, phone, remark, UNIX_TIMESTAMP(
 <tr><th>학번<td><?= h($user->year) ?>
 <tr><th>이메일<td><input type=text name=email size=40 value="<?= h($user->email) ?>">
 <tr><th>전화번호<td><input type=text name=phone size=40 value="<?= h($user->phone) ?>">
-<tr><th>남김말<td><textarea name=remark cols=80 rows=8><?= h($user->remark) ?></textarea>
+<tr><th>남김말<td><textarea name=remark cols=40 rows=8><?= h($user->remark) ?></textarea>
 <tr><th>최종 수정<td><?= formatdate($user->updated) ?>
 <tr><th><td><input type=submit value="저장&raquo;" accesskey=s>
 </table>
