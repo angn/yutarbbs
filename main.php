@@ -7,6 +7,7 @@ if ($_REQUEST['x'])
 
 define('ROOT', dirname(__FILE__));
 
+date_default_timezone_set('Asia/Seoul');
 setlocale(LC_ALL, 'ko_KR.utf8', 'en_US.utf8', '');
 
 define('PLAIN', '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/=');
@@ -43,8 +44,10 @@ function db()
 {
     global $conf;
 	static $c;
-    if (!$c)
+    if (!$c) {
         $c = new PDO($conf['DSN'], $conf['DBUSER'], $conf['DBPASS']);
+		$c->query("SET time_zone='+09:00'");
+	}
     return $c;
 }
 
