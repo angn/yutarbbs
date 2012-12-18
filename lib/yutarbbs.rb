@@ -16,4 +16,8 @@ module Yutarbbs
   def formattext text
     text
   end
+  
+  def u *items
+    "/#{items * '/'}"
+  end
 end

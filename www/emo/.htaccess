@@ -1,3 +1,0 @@
-Options +MultiViews
-RemoveHandler .php
-AddType application/x-httpd-php-source .php
