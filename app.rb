@@ -5,6 +5,9 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'sinatra/session'
 require 'yutarbbs'
+also_reload 'lib/yutarbbs' if development?
+also_reload 'lib/yutarbbs/text' if development?
+also_reload 'lib/yutarbbs/database' if development?
 
 ATTACHMENT_DIR = File.expand_path 'attachments'
 EMOTICON_DIR = File.expand_path 'views'
