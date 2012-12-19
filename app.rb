@@ -7,6 +7,7 @@ require 'mysql'
 require './lib/yutarbbs'
 also_reload './lib/yutarbbs.rb' if development?
 
+ATTACHMENT_DIR = File.expand_path 'attachments'
 EMOTICON_DIR = File.expand_path 'views'
 
 Encoding.default_external = Encoding::UTF_8
@@ -147,7 +148,12 @@ end
 
 get '/delete_thread/*' do |tid|
   session!
-  tid
+  thread = fetch_one 'SELECT fid, tid, attachment FROM threads WHERE tid = ? LIMIT 1', tid
+  if delete :threads, 'tid = ? AND uid = ?', tid, session[:uid]
+    FileUtils.rm_f File.join(ATTACHMENT_DIR, "#{thread[:tid]}-#{thread[:attachment]}")
+    redirect to "/forum/#{thread[:fid]}"
+  end
+  error 204
 end
 
 get '/delete_message/*' do |mid|
