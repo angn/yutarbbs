@@ -1,6 +1,7 @@
 # encoding=utf-8
 
 require 'json'
+require 'cgi'
 
 module Yutarbbs
   def my
@@ -48,11 +49,31 @@ module Yutarbbs
   end
 
   def h text
-    text.to_s.gsub(/&/, '&amp;').gsub(/</, '&lt;')
+    CGI.escape_html text
+  end
+  
+  def formattext text
+    chunks = text.split %r{(<[a-z]+[^>]*>|</[a-z]+[^>]*>)}i
+    text = chunks.map { |e| _formattexteach e } * ''
+    text.sub %r{<tex>(.+?)</tex>}m do |e|
+      %Q{<img src="http://www.forkosh.dreamhost.com/mathtex.cgi?#{CGI.escape e}">}
+    end
   end
 
-  def formattext text
-    text
+  def _formattexteach text
+    return text if text =~ %r{^<[A-Z/].*>$}i
+    CGI.escape_html(text).gsub %r{\b(https?://[^\s<]+)|([\w.]+@[\w.]+)|(?<!\w)@([\w]+)} do
+      style = nil
+      if $1 # website
+        href, label = $1, $1
+        # $label = iconv('utf8', 'utf8//translit', rawurldecode($website));
+      elsif $2 # email
+        href, label = "mailto:#{$2}", $2
+      elsif $3 # twitter
+        href, label, style = "https://twitter.com/#{$3}", "@#{$3}", 'twit'
+      end
+      %Q{<a target="_blank" href="#{href}" class="#{style}">#{label}</a>}
+    end
   end
 
   def formatphone text
@@ -100,7 +121,9 @@ module Yutarbbs
   end
 
   def replace_emoticons html
-    html
+    html.gsub /@([^@\/.\s]+)@/ do
+      %Q/<img src="#{u('emo', $1)}" alt="#{h $1}">/
+    end
   end
   
   def get_updated_forum
