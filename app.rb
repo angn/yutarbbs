@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'sinatra/session'
@@ -48,7 +50,29 @@ end
 
 get '/me' do
   session!
-  'ok'
+  @user = fetch_one 'SELECT uid, userid, year, name, email, phone, remark, UNIX_TIMESTAMP(updated_on) updated FROM users WHERE uid = ?', session[:uid]
+  not_found unless @user
+  erb :me
+end
+
+post '/me' do
+  session!
+  if params[:passwd]
+    if params[:passwd] == params[:passwd2]
+      passwd = hashpasswd params[:passwd]
+      if update :users, 'uid = ?', params[:uid], :passwd => passwd
+        alert '변경되었습니다.'
+      else
+        error 400, alert('변경 실패!')
+      end
+    else
+      error 400, alert('암호 이상해!')
+    end
+  elsif params[:phone]
+    puts now
+    update :users, 'uid = ?', params[:uid], params.merge(:updated_on => now)
+    redirect back
+  end
 end
 
 get '/users' do

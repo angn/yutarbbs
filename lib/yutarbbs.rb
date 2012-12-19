@@ -1,5 +1,7 @@
 # encoding=utf-8
 
+require 'json'
+
 module Yutarbbs
   def my
     my = Mysql.connect '127.0.0.1', 'yutar', '', 'yutar'
@@ -24,8 +26,21 @@ module Yutarbbs
     result
   end
 
+  def update table_name, where, *params, data
+    sets = data.keys.map { |e| "#{e}=?" } * ','
+    my.prepare("UPDATE #{table_name} SET #{sets} WHERE #{where}").execute *data.values, *params
+  end
+
+  def now
+    Time.now.strftime '%Y%m%d%H%M%S'
+  end
+
+  def alert text
+    "<script>alert(#{text.to_json});history.back()</script>"
+  end
+
   def h text
-    text.gsub(/&/, '&amp;').gsub(/</, '&lt;')
+    text.to_s.gsub(/&/, '&amp;').gsub(/</, '&lt;')
   end
 
   def formattext text
