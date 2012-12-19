@@ -1,13 +1,3 @@
-<%
-if (requirelogin())
-    return;
-
-if ($_FILES && $_FILES['emoticon']['size'] <= 100 << 10) {
-    move_uploaded_file(
-        $_FILES['emoticon']['tmp_name'],
-        ROOT . '/www/emo/' . basename($_FILES['emoticon']['name']));
-}
-%>
 <h2>이모티콘</h2>
 
 <form method=post enctype=multipart/form-data>
@@ -15,10 +5,7 @@ if ($_FILES && $_FILES['emoticon']['size'] <= 100 << 10) {
 </form>
 
 <ul class=emoticons>
-<%
-foreach (glob(ROOT . '/www/emo/*') as $path):
-    $name = preg_replace('#\.[^.]*$#s', '', basename($path));
-%>
-<li><a href="<%= u(emo, $name) %>"><%= h($name) %></a>
+<% @emoticons.each do |name| %>
+<li><a href="<%= u('emo', name) %>"><%= h(name) %></a>
 <% end %>
 </ul>

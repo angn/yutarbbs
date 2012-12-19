@@ -5,13 +5,15 @@ require 'mysql'
 require './lib/yutarbbs'
 also_reload './lib/yutarbbs.rb' if development?
 
-Encoding.default_external = Encoding::UTF_8
+EMOTICON_DIR = File.expand_path 'views'
 
-include Yutarbbs
+Encoding.default_external = Encoding::UTF_8
 
 set :layout, true
 set :session_name, 'yutarbbs'
 set :session_secret, ''
+
+helpers Yutarbbs
 
 get '/' do
   @notice = fetch_one 'SELECT * FROM threads WHERE fid = 1 ORDER BY created_at DESC'
@@ -55,11 +57,11 @@ get '/users' do
   erb :users
 end
 
-get '/forum/:fid' do |fid|
+get '/forum/*' do |fid|
   call env.merge 'PATH_INFO' => "/forum/#{fid}/1"
 end
 
-get '/forum/:fid/:page' do |fid, page|
+get '/forum/*/*' do |fid, page|
   session!
   @fid = fid.to_i
   not_found unless forum_name[@fid]
@@ -82,7 +84,7 @@ get '/forum/:fid/:page' do |fid, page|
   erb :forum
 end
 
-get '/thread/:tid' do |tid|
+get '/thread/*' do |tid|
   session!
   # if ($_COOKIE['lasttid'] != $tid) {
   #   update('threads', 'hits = hits + 1', array('tid = ? AND uid != ?', $tid, $my->uid), 1);
@@ -98,7 +100,7 @@ get '/thread/:tid' do |tid|
   erb :thread
 end
 
-get '/thread/:tid/:modifier' do |tid, modifier|
+get '/thread/*/*' do |tid, modifier|
   session!
   case modifier
   when 'next'
@@ -136,5 +138,18 @@ end
 
 get '/emoticons' do
   session!
-  'ok'
+  @emoticons = Dir[File.join(EMOTICON_DIR, '*')].map { |e| File.basename(e).sub /\.[^.]*$/, '' }
+  erb :emoticons
+end
+
+post '/emoticons' do
+  sesseion!
+  if emoticon = params[:emoticon] and emoticon[:tempfile]
+    FileUtils.cp emoticon[:tempfile], File.join(EMOTICON_DIR, File.basename(emoticon[:filename]))
+  end
+end
+
+get '/emo/*' do |name|
+  # send_file File.join(EMOTICON_DIR, name)
+  not_found
 end
