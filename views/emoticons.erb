@@ -1,4 +1,4 @@
-<?php
+<%
 if (requirelogin())
     return;
 
@@ -7,7 +7,7 @@ if ($_FILES && $_FILES['emoticon']['size'] <= 100 << 10) {
         $_FILES['emoticon']['tmp_name'],
         ROOT . '/www/emo/' . basename($_FILES['emoticon']['name']));
 }
-?>
+%>
 <h2>이모티콘</h2>
 
 <form method=post enctype=multipart/form-data>
@@ -15,10 +15,10 @@ if ($_FILES && $_FILES['emoticon']['size'] <= 100 << 10) {
 </form>
 
 <ul class=emoticons>
-<?php
+<%
 foreach (glob(ROOT . '/www/emo/*') as $path):
     $name = preg_replace('#\.[^.]*$#s', '', basename($path));
-?>
-<li><a href="<?= u(emo, $name) ?>"><?= h($name) ?></a>
-<?php endforeach ?>
+%>
+<li><a href="<%= u(emo, $name) %>"><%= h($name) %></a>
+<% end %>
 </ul>

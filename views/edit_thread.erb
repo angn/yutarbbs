@@ -1,4 +1,4 @@
-<?php
+<%
 if (requirelogin())
     return;
 
@@ -33,17 +33,17 @@ if ($tid == 'forum') {
 } else {
     $thread = fetchone('tid, fid, subject, message, UNIX_TIMESTAMP(created_at) created FROM threads INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', $tid) or notfound();
 }
-?>
-<h2><?= $FORUM_NAME[$fid] ?></h2>
+%>
+<h2><%= $FORUM_NAME[$fid] %></h2>
 
 <div class=thread>
 <form method=post enctype=multipart/form-data>
-<h3><input type=text name=subject size=80 value="<?= h($thread->subject) ?>" autofocus></h3>
-<div class=article><textarea name=message cols=80 rows=20><?= h($thread->message) ?></textarea><small>&lt;tex&gt;\code&lt;/tex&gt;</small>
+<h3><input type=text name=subject size=80 value="<%= h($thread->subject) %>" autofocus></h3>
+<div class=article><textarea name=message cols=80 rows=20><%= h($thread->message) %></textarea><small>&lt;tex&gt;\code&lt;/tex&gt;</small>
 <input type=file name=attachment size=30>
 <input type=submit accesskey=s value="작성">
 </div>
-<input type=hidden name=fid value="<?= $thread->fid ?>">
-<input type=hidden name=tid value="<?= $thread->tid ?>">
+<input type=hidden name=fid value="<%= $thread->fid %>">
+<input type=hidden name=tid value="<%= $thread->tid %>">
 </form>
 </div>

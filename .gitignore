@@ -1,5 +1,2 @@
-.htaccess
-/www/attachment/*
-/www/emo/*
-/conf.php
 /.bundle
+/Gemfile.lock

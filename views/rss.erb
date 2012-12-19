@@ -1,9 +1,9 @@
-<?php
+<%
 
 $threads = fetchall('fid, tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, message FROM threads INNER JOIN users USING (uid) ORDER BY created_at DESC LIMIT 20');
 
 $rss = new SimpleXMLElement(
-        '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"/>');
+        '<?xml version="1.0" encoding="UTF-8"%><rss version="2.0"/>');
 $chan = $rss->addChild('channel');
 $chan->addChild('title', 'yutar.net');
 $chan->addChild('link', h(url()));
