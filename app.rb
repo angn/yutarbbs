@@ -51,7 +51,8 @@ end
 
 get '/users' do
   session!
-  'ok'
+  @users = fetch_all 'SELECT year, name, email, phone, remark FROM users ORDER BY year DESC, name'
+  erb :users
 end
 
 get '/forum/:fid' do |fid|

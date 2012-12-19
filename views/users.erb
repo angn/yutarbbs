@@ -1,9 +1,3 @@
-<%
-if (requirelogin())
-    return;
-
-$users = fetchall('year, name, email, phone, remark FROM users ORDER BY year DESC, name');
-%>
 <h2>회원명부</h2>
 
 <table class=users>
@@ -15,13 +9,13 @@ $users = fetchall('year, name, email, phone, remark FROM users ORDER BY year DES
 <td>남김말
 <tbody>
 
-<% foreach ($users as $i => $u): %>
-<tr class="<%= $i & 1 ? 'a' : '' %>">
-<td><%= $u->year %>
-<td><%= h($u->name) %>
-<td><%= h(formatphone($u->phone)) %><br>
-    <a class=email href="mailto:<%= h($u->email) %>"><%= h($u->email) %></a>
-<td><%= formattext($u->remark) %></td>
+<% @users.each_with_index do |user, index| %>
+<tr class="<%= 'a' if index.odd? %>">
+<td><%= '%02d' % user[:year] %>
+<td><%= h(user[:name]) %>
+<td><%= h(formatphone(user[:phone])) %><br>
+    <a class=email href="mailto:<%= h(user[:email]) %>"><%= h(user[:email]) %></a>
+<td><%= formattext(user[:remark]) %></td>
 <% end %>
 
 </table>
