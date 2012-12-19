@@ -81,10 +81,6 @@ get '/users' do
   erb :users
 end
 
-get '/forum/*' do |fid|
-  call env.merge 'PATH_INFO' => "/forum/#{fid}/1"
-end
-
 get '/forum/*/*' do |fid, page|
   session!
   @fid = fid.to_i
@@ -106,6 +102,10 @@ get '/forum/*/*' do |fid, page|
   end
 
   erb :forum
+end
+
+get '/forum/*' do |fid|
+  call env.merge 'PATH_INFO' => "/forum/#{fid}/1"
 end
 
 get '/thread/*' do |tid|
@@ -140,24 +140,27 @@ get '/rss' do
   'ok'
 end
 
-get '/edit_thread' do
+get '/edit_thread/*' do |tid|
   session!
-  'ok'
+  tid
 end
 
-get '/delete_thread' do
+get '/delete_thread/*' do |tid|
   session!
-  'ok'
+  tid
 end
 
-get '/delete_message' do
+get '/delete_message/*' do |mid|
   session!
-  'ok'
+  delete :messages, 'mid = ? AND uid = ?', mid, session[:uid] if params[:y] == '1'
+  redirect back
 end
 
-get '/message' do
+post '/message' do
   session!
-  'ok'
+  not_found unless params[:tid]
+  insert :messages, params.merge(:created_at => now, :uid => session[:uid])
+  redirect back
 end
 
 get '/emoticons' do

@@ -26,9 +26,17 @@ module Yutarbbs
     result
   end
 
+  def insert table_name, data
+    my.prepare("INSERT INTO #{table_name} (#{data.keys * ','}) VALUES (#{%w/?/ * data.values.length * ','})").execute *data.values
+  end
+
   def update table_name, where, *params, data
     sets = data.keys.map { |e| "#{e}=?" } * ','
     my.prepare("UPDATE #{table_name} SET #{sets} WHERE #{where}").execute *data.values, *params
+  end
+
+  def delete table_name, where, *params
+    my.prepare("DELETE FROM #{table_name} WHERE #{where}").execute *params
   end
 
   def now
