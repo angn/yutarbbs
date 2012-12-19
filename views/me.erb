@@ -11,7 +11,6 @@
 <tr><th>최종 수정<td><%= formatdate(@user[:updated]) %>
 <tr><th><td><input type=submit value="저장&raquo;" accesskey=s>
 </table>
-<input type=hidden name=uid value="<%= h(@user[:uid]) %>">
 </form>
 
 <form method=post class=me>
@@ -21,5 +20,4 @@
 <tr><th>한 번 더<td><input type=password name=passwd2>
 <tr><th><td><input type=submit value="변경&raquo;">
 </table>
-<input type=hidden name=uid value="<%= @user[:uid] %>">
 </form>

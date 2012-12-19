@@ -33,6 +33,7 @@ module Yutarbbs
 
   def update table_name, where, *params, data
     sets = data.keys.map { |e| "#{e}=?" } * ','
+    puts "UPDATE #{table_name} SET #{sets} WHERE #{where}"
     my.prepare("UPDATE #{table_name} SET #{sets} WHERE #{where}").execute *data.values, *params
   end
 
@@ -49,7 +50,7 @@ module Yutarbbs
   end
 
   def h text
-    CGI.escape_html text
+    CGI.escape_html text.to_s
   end
   
   def formattext text

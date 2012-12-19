@@ -61,7 +61,7 @@ post '/me' do
   if params[:passwd]
     if params[:passwd] == params[:passwd2]
       passwd = hashpasswd params[:passwd]
-      if update :users, 'uid = ?', params[:uid], :passwd => passwd
+      if update :users, 'uid = ?', session[:uid], :passwd => passwd
         alert '변경되었습니다.'
       else
         error 400, alert('변경 실패!')
@@ -71,7 +71,11 @@ post '/me' do
     end
   elsif params[:phone]
     puts now
-    update :users, 'uid = ?', params[:uid], params.merge(:updated_on => now)
+    update :users, 'uid = ?', session[:uid],
+      :email => params[:email],
+      :phone => params[:phone],
+      :remark => params[:remark],
+      :updated_on => now
     redirect back
   end
 end
@@ -141,9 +145,47 @@ get '/rss' do
   'ok'
 end
 
+get '/edit_thread/forum/*' do |fid|
+  session!
+  @thread = { :fid => fid.to_i, :tid => 0 }
+  erb :edit_thread
+end
+
 get '/edit_thread/*' do |tid|
   session!
-  tid
+  @thread = fetch_one 'SELECT tid, fid, subject, message, UNIX_TIMESTAMP(created_at) created FROM threads INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', tid
+  not_found unless @thread
+  erb :edit_thread
+end
+
+post '/edit_thread/*' do |tid|
+  if params[:subject] =~ /\S/
+    unless params[:tid] and not params[:tid].empty?
+      tid = insert :threads,
+        :subject => params[:subject],
+        :message => params[:message],
+        :fid => params[:fid],
+        :created_at => now,
+        :uid => params[:uid]
+      # array('attachment' => strval($_FILES['attachment']['name'])));
+    else
+      update :threads, 'tid = ? AND uid = ?', params[:tid], session[:uid],
+        :subject => params[:subject],
+        :message => params[:message]
+      if nil # if ($_FILES['attachment']['name']) {
+        update :threads, 'tid = ? AND uid = ?', params['tid'], session[:uid],
+          :attachment => $_FILES['attachment']['name']
+      end
+      tid = params[:tid]
+    end
+    if tid
+      if nil #file = $_FILES['attachment']
+        # FileUtils.mv $file['tmp_name'], ROOT . "/www/attachment/$tid-{$file['name']}");
+      end
+      redirect to "/thread/#{tid}"
+    end
+  end
+  not_found
 end
 
 get '/delete_thread/*' do |tid|
@@ -165,7 +207,11 @@ end
 post '/message' do
   session!
   not_found unless params[:tid]
-  insert :messages, params.merge(:created_at => now, :uid => session[:uid])
+  insert :messages,
+    :tid => params[:tid],
+    :message => params[:message],
+    :created_at => now,
+    :uid => session[:uid]
   redirect back
 end
 
