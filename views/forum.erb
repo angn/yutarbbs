@@ -1,8 +1,8 @@
-<h2><%= $FORUM_NAME[$fid] %></h2>
+<h2><%= forum_name[@fid] %></h2>
 <div class=forum>
 
 <form method="post" class="search"><p>
-	<input id="search" type="search" name="keyword" placeholder="이 게시판에서 검색" accesskey="f" value="<%= h($keyword) %>"><input type="submit" value="검색">
+	<input id="search" type="search" name="keyword" placeholder="이 게시판에서 검색" accesskey="f" value="<%= h(@keyword || '') %>"><input type="submit" value="검색">
 </p></form>
 
 <h3>
@@ -11,44 +11,43 @@
     <span class=date>날짜</span>
     <span class=hits>조회</span>
 </h3>
-<ol id=list>
-<% if ($threads): foreach ($threads as $i => $t):
-$t->replies = $info[$t->tid]->replies;
-$t->updated = $info[$t->tid]->updated;
-%><li class="<% $i & 1 and print 'a' %>"><a href="<%= u(thread, $t->tid) %>">
-    <span class=subject><%= h($t->subject) %><% if ($t->replies): %> <small class=replies><%= number_format($t->replies) %></small><% end %> <% $t->updated and print '<em>*</em>' %> <% if ($t->attachment): %><span class=attachment>첨부</span><% end %></span>
-    <span class=author><small class=year><%= $t->year %></small><%= h($t->name) %></span>
-    <span class=date><%= formatdate($t->created) %></span>
-    <span class=hits><%= number_format($t->hits) %></span>
-</a></li><% end; end %>
+<ol id="list">
+<% @threads.each_with_index do |thread, index| %>
+<li class="<%= 'a' if index.odd? %>"><a href="<%= u('thread', thread[:tid]) %>">
+    <span class=subject><%= h(thread[:subject]) %><% if thread[:replies] %> <small class=replies><%= number_format(thread[:replies]) %></small><% end %> <%= '<em>*</em>' if thread[:updated] && thread[:updated].nonzero? %> <% if thread[:attachment] && ! thread[:attachment].empty? %><span class=attachment>첨부</span><% end %></span>
+    <span class=author><small class=year><%= '%02d' % thread[:year] %></small><%= h(thread[:name]) %></span>
+    <span class=date><%= formatdate(thread[:created]) %></span>
+    <span class=hits><%= number_format(thread[:hits]) %></span>
+</a></li>
+<% end %>
 </ol>
 
-<form onsubmit="location.href='<%= u('forum', $fid, '') %>'+this.elements[0].value;return false">
+<form onsubmit="location.href='<%= u('forum', @fid, '') %>'+this.elements[0].value;return false">
 <p class=pages>
 
-<% if (empty($keyword)): %>
+<% unless @keyword %>
 
-<% if ($page > 1): %>
-<a href="<%= u('forum', $fid, $page - 1) %>" accesskey=p>&laquo;이전</a>
-<% else: %>
+<% if @page > 1 %>
+<a href="<%= u('forum', @fid, @page - 1) %>" accesskey=p>&laquo;이전</a>
+<% else %>
 <del>&laquo;이전</del>
 <% end %>
 ·
-<input size=2 value="<%= h($page) %>"> / <%= number_format($max_page) %>
+<input size=2 value="<%= @page %>"> / <%= number_format(@max_page) %>
  ·
-<% if ($page < $max_page): %>
-<a href="<%= u('forum', $fid, $page + 1) %>" accesskey=n>다음&raquo;</a>
-<% else: %>
+<% if @page < @max_page %>
+<a href="<%= u('forum', @fid, @page + 1) %>" accesskey=n>다음&raquo;</a>
+<% else %>
 <del>다음&raquo;</del>
 <% end %>
 
-<% else: %>
+<% else %>
 &nbsp;
 <% end %>
 
 </p>
 </form>
 
-<p class=command><a href="<%= u('edit_thread', 'forum', $fid) %>" accesskey=w>새 글</a></p>
+<p class=command><a href="<%= u('edit_thread', 'forum', @fid) %>" accesskey=w>새 글</a></p>
 
 </div>

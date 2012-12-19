@@ -56,8 +56,12 @@ module Yutarbbs
     html
   end
 
-  def number_format text
-    text.to_s.gsub /(?<=\d)(?=(\d\d\d)+)$/, ','
+  def formattime timestamp
+    formatdate timestamp, true
+  end
+
+  def number_format number
+    number.to_s.gsub /(?<=\d)(?=(\d\d\d)+)$/, ','
   end
   
   def u *items

@@ -54,9 +54,31 @@ get '/users' do
   'ok'
 end
 
-get '/forum' do
+get '/forum/:fid' do |fid|
+  call env.merge 'PATH_INFO' => "/forum/#{fid}/1"
+end
+
+get '/forum/:fid/:page' do |fid, page|
   session!
-  'ok'
+  @fid = fid.to_i
+  not_found unless forum_name[@fid]
+  @page = [ 1, page.to_i ].max
+  @max_page = fetch_one('SELECT GREATEST(1, CEILING(COUNT(*) / 15)) n FROM threads WHERE fid = ?', fid)[:n].to_i
+  if @keyword = params[:keyword]
+    @threads = fetch_all 'SELECT tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, hits, attachment FROM threads INNER JOIN users USING (uid) WHERE fid = ? AND (UPPER(name) = UPPER(?) OR INSTR(UPPER(subject), UPPER(?)) OR INSTR(UPPER(message), UPPER(?))) ORDER BY created_at DESC', fid, @keyword, @keyword, @keyword
+  else
+    @threads = fetch_all "SELECT tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, hits, attachment FROM threads INNER JOIN users USING (uid) WHERE fid = ? ORDER BY created_at DESC LIMIT #{@page * 15 - 15}, 15", fid
+  end
+
+  if @threads.length.nonzero?
+    tids = @threads.map { |e| e[:tid] } * ','
+    rs = fetch_all "SELECT tid, COUNT(tid) replies, MAX(created_at) + INTERVAL 1 DAY > NOW() updated FROM messages WHERE tid IN (#{tids}) GROUP BY tid"
+    @threads.each do |e|
+      e.update rs.find { |r| r[:tid] == e[:tid] } || {}
+    end
+  end
+
+  erb :forum
 end
 
 get '/thread/:tid' do |tid|
