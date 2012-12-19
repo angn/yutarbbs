@@ -1,11 +1,10 @@
 # encoding=utf-8
+$:.unshift File.expand_path File.join(File.dirname(__FILE__), 'lib')
 
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'sinatra/session'
-require 'mysql'
-require './lib/yutarbbs'
-also_reload './lib/yutarbbs.rb' if development?
+require 'yutarbbs'
 
 ATTACHMENT_DIR = File.expand_path 'attachments'
 EMOTICON_DIR = File.expand_path 'views'
@@ -16,7 +15,8 @@ set :layout, true
 set :session_name, 'yutarbbs'
 set :session_secret, ''
 
-helpers Yutarbbs
+helpers Yutarbbs, Yutarbbs::Text
+include Yutarbbs::Database
 
 get '/' do
   @notice = fetch_one 'SELECT * FROM threads WHERE fid = 1 ORDER BY created_at DESC'
