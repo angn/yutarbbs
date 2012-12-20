@@ -5,6 +5,7 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'sinatra/session'
 require 'yutarbbs'
+require 'builder'
 also_reload 'lib/yutarbbs' if development?
 also_reload 'lib/yutarbbs/text' if development?
 also_reload 'lib/yutarbbs/database' if development?
@@ -145,7 +146,25 @@ get '/thread/*/*' do |tid, modifier|
 end
 
 get '/rss' do
-  'ok'
+  @threads = fetch_all 'SELECT fid, tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, message FROM threads INNER JOIN users USING (uid) ORDER BY created_at DESC LIMIT 20'
+  content_type 'application/rss+xml'
+  Builder::XmlMarkup.new.rss :version => '2.0' do |xml|
+    xml.channel do
+      xml.title 'yutar.net'
+      xml.link to '/'
+      xml.description 'yutar. the premium.'
+      @threads.each do |thread|
+        xml.item do
+          xml.title "[#{forum_name[thread[:fid]]}] #{thread[:subject]}"
+          xml.link to "/thread/#{thread[:tid]}"
+          xml.description formattext(thread[:message]).gsub(/\n/, '<br/>')
+          xml.author "#{'%02d' % thread[:year]}#{thread[:name]}"
+          xml.pubDate Time.at(thread[:created]).strftime('%a, %-d %b %Y %T %z')
+          xml.category forum_name[thread[:fid]]
+        end
+      end
+    end
+  end
 end
 
 get '/edit_thread/forum/*' do |fid|
