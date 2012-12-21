@@ -10,8 +10,13 @@ also_reload 'lib/yutarbbs' if development?
 also_reload 'lib/yutarbbs/text' if development?
 also_reload 'lib/yutarbbs/database' if development?
 
-ATTACHMENT_DIR = File.expand_path 'attachments'
-EMOTICON_DIR = File.expand_path 'views'
+raise "ATTACHMENT_DIR is not set." unless ENV['ATTACHMENT_DIR']
+ATTACHMENT_DIR = File.expand_path ENV['ATTACHMENT_DIR']
+raise "#{ATTACHMENT_DIR} doesn't exist." unless File.directory? ATTACHMENT_DIR
+
+raise "EMOTICON_DIR is not set." unless ENV['EMOTICON_DIR']
+EMOTICON_DIR = File.expand_path ENV['EMOTICON_DIR']
+raise "#{EMOTICON_DIR} doesn't exist." unless File.directory? EMOTICON_DIR
 
 Encoding.default_external = Encoding::UTF_8
 
@@ -244,13 +249,19 @@ get '/emoticons' do
 end
 
 post '/emoticons' do
-  sesseion!
-  if emoticon = params[:emoticon] and emoticon[:tempfile]
-    FileUtils.cp emoticon[:tempfile], File.join(EMOTICON_DIR, File.basename(emoticon[:filename]))
-  end
+  session!
+  emoticon = params[:emoticon]
+  error 204 unless emoticon and emoticon[:tempfile]
+  error 400, alert('100KB 이하로 해줘요.') if 100 * 1024 < File.size(emoticon[:tempfile])
+  FileUtils.cp emoticon[:tempfile], "#{EMOTICON_DIR}/#{emoticon[:filename]}"
+  redirect back
 end
 
+IMAGE_EXT = %w/jpg jpeg gif png JPG JPEG GIF PNG/
+
 get '/emo/*' do |name|
-  # send_file File.join(EMOTICON_DIR, name)
-  not_found
+  candidates = IMAGE_EXT.map { |ext| "#{EMOTICON_DIR}/#{name}.#{ext}" }
+  path = candidates.find { |path| File.readable? path }
+  not_found unless path
+  send_file path
 end
