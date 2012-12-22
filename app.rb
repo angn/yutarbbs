@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'sinatra/session'
+require "sinatra/cookies"
 require 'yutarbbs'
 require 'builder'
 also_reload 'lib/yutarbbs' if development?
@@ -123,10 +124,10 @@ end
 
 get '/thread/*' do |tid|
   session!
-  # if ($_COOKIE['lasttid'] != $tid) {
-  #   update('threads', 'hits = hits + 1', array('tid = ? AND uid != ?', $tid, $my->uid), 1);
-  #   setcookie('lasttid', $tid);
-  # }
+  if cookies[:lasttid] != tid
+    cookies[:lasttid] = tid
+    update :threads, 'tid=? AND uid!=?', tid, session[:uid], 'hits=hits+1'
+  end
   @thread = fetch_one 'SELECT tid, fid, subject, t.uid, year, name, phone, email, remark, message, UNIX_TIMESTAMP(created_at) created, NULLIF(attachment, "") attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', tid
   not_found unless @thread
   @messages = fetch_all 'SELECT mid, message, uid, year, name, UNIX_TIMESTAMP(created_at) created FROM messages INNER JOIN users USING (uid) WHERE tid = ? ORDER BY created_at', tid
