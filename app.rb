@@ -122,6 +122,17 @@ get '/forum/*' do |fid|
   call env.merge 'PATH_INFO' => "/forum/#{fid}/1"
 end
 
+get '/thread/*/*' do |tid, modifier|
+  case modifier
+  when 'next'
+    thread = fetch_one 'SELECT b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid<a.tid ORDER BY b.tid DESC LIMIT 1', tid
+  when 'prev'
+    thread = fetch_one 'SELECT b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid>a.tid ORDER BY b.tid LIMIT 1', tid
+  end
+  redirect to "/thread/#{thread[:tid]}" if thread
+  error 204
+end
+
 get '/thread/*' do |tid|
   session!
   if cookies[:lasttid] != tid
@@ -141,18 +152,6 @@ get '/attachment/*/*' do |tid, filename|
   @path = "#{ATTACHMENT_DIR}/#{tid}-#{filename}"
   not_found unless File.readable? @path
   send_file @path
-end
-
-get '/thread/*/*' do |tid, modifier|
-  session!
-  case modifier
-  when 'next'
-    thread = fetch_one 'SELECT b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid<a.tid ORDER BY b.tid DESC LIMIT 1', tid
-  when 'prev'
-    thread = fetch_one 'SELECT b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid>a.tid ORDER BY b.tid LIMIT 1', tid
-  end
-  redirect to "/thread/#{thread[:tid]}" if thread
-  error 204
 end
 
 get '/rss' do
