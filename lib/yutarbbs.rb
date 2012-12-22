@@ -20,4 +20,9 @@ module Yutarbbs
   @@thread ||= Thread.new do
     @@updates = nil while sleep 60
   end
+  
+  def store src, dest
+    FileUtils.cp src, dest
+    FileUtils.chmod 0666, dest
+  end
 end

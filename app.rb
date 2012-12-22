@@ -127,7 +127,7 @@ get '/thread/*' do |tid|
   #   update('threads', 'hits = hits + 1', array('tid = ? AND uid != ?', $tid, $my->uid), 1);
   #   setcookie('lasttid', $tid);
   # }
-  @thread = fetch_one 'SELECT tid, fid, subject, t.uid, year, name, phone, email, remark, message, UNIX_TIMESTAMP(created_at) created, attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', tid
+  @thread = fetch_one 'SELECT tid, fid, subject, t.uid, year, name, phone, email, remark, message, UNIX_TIMESTAMP(created_at) created, NULLIF(attachment, "") attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', tid
   not_found unless @thread
   @messages = fetch_all 'SELECT mid, message, uid, year, name, UNIX_TIMESTAMP(created_at) created FROM messages INNER JOIN users USING (uid) WHERE tid = ? ORDER BY created_at', tid
   @path = "#{ATTACHMENT_DIR}/#{@thread[:tid]}-#{@thread[:attachment]}"
@@ -189,43 +189,47 @@ get '/edit_thread/*' do |tid|
   erb :edit_thread
 end
 
-post '/edit_thread/*' do |tid|
-  if params[:subject] =~ /\S/
-    attachment = params[:attachment]
-    unless params[:tid] and not params[:tid].empty?
-      tid = insert :threads,
-        :subject => params[:subject],
-        :message => params[:message],
-        :fid => params[:fid],
-        :created_at => now,
-        :uid => params[:uid],
-        :attachment => attachment && attachment[:filename]
-    else
-      update :threads, 'tid = ? AND uid = ?', params[:tid], session[:uid],
-        :subject => params[:subject],
-        :message => params[:message],
-        :attachment => attachment && attachment[:filename]
-      tid = params[:tid]
-    end
-    if tid
-      if attachment && attachment[:filename]
-        FileUtils.cp attachment[:tempfile],
-          "#{ATTACHMENT_DIR}/#{tid}-#{attachment[:filename]}"
-      end
-      redirect to "/thread/#{tid}"
-    end
+post '/edit_thread/forum/*' do |fid|
+  session!
+  error 204 if params[:subject] !~ /\S/
+  attachment = params[:attachment]
+  tid = insert :threads,
+    :subject => params[:subject],
+    :message => params[:message],
+    :fid => fid,
+    :created_at => now,
+    :uid => session[:uid],
+    :attachment => attachment && attachment[:filename] || ''
+  error unless tid
+  if attachment && attachment[:filename]
+    store attachment[:tempfile],
+      "#{ATTACHMENT_DIR}/#{tid}-#{attachment[:filename]}"
   end
-  not_found
+  redirect to "/thread/#{tid}"
+end
+
+post '/edit_thread/*' do |tid|
+  session!
+  error 204 if params[:subject] !~ /\S/
+  attachment = params[:attachment]
+  update :threads, 'tid = ? AND uid = ?', tid, session[:uid],
+    :subject => params[:subject],
+    :message => params[:message],
+    :attachment => attachment && attachment[:filename] || ''
+  if attachment && attachment[:filename]
+    store attachment[:tempfile],
+      "#{ATTACHMENT_DIR}/#{tid}-#{attachment[:filename]}"
+  end
+  redirect to "/thread/#{tid}"
 end
 
 get '/delete_thread/*' do |tid|
   session!
   thread = fetch_one 'SELECT fid, tid, attachment FROM threads WHERE tid = ? LIMIT 1', tid
-  if delete :threads, 'tid = ? AND uid = ?', tid, session[:uid]
-    FileUtils.rm_f "#{ATTACHMENT_DIR}/#{thread[:tid]}-#{thread[:attachment]}"
-    redirect to "/forum/#{thread[:fid]}"
-  end
-  error 204
+  not_found unless thread
+  delete :threads, 'tid = ? AND uid = ?', tid, session[:uid]
+  FileUtils.rm_f "#{ATTACHMENT_DIR}/#{tid}-#{thread[:attachment]}"
+  redirect to "/forum/#{thread[:fid]}"
 end
 
 get '/delete_message/*' do |mid|
@@ -256,7 +260,7 @@ post '/emoticons' do
   emoticon = params[:emoticon]
   error 204 unless emoticon and emoticon[:tempfile]
   error 400, alert('100KB 이하로 해줘요.') if 100 * 1024 < File.size(emoticon[:tempfile])
-  FileUtils.cp emoticon[:tempfile], "#{EMOTICON_DIR}/#{emoticon[:filename]}"
+  store emoticon[:tempfile], "#{EMOTICON_DIR}/#{emoticon[:filename]}"
   redirect back
 end
 

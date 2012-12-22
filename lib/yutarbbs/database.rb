@@ -25,7 +25,7 @@ module Yutarbbs::Database
   end
 
   def insert table_name, data
-    my.prepare("INSERT INTO #{table_name} (#{data.keys * ','}) VALUES (#{%w/?/ * data.values.length * ','})").execute *data.values
+    my.prepare("INSERT INTO #{table_name} (#{data.keys * ','}) VALUES (#{%w/?/ * data.values.length * ','})").execute(*data.values).insert_id
   end
 
   def update table_name, where, *params, data
