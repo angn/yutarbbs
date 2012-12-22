@@ -131,11 +131,16 @@ get '/thread/*' do |tid|
   @thread = fetch_one 'SELECT tid, fid, subject, t.uid, year, name, phone, email, remark, message, UNIX_TIMESTAMP(created_at) created, attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', tid
   not_found unless @thread
   @messages = fetch_all 'SELECT mid, message, uid, year, name, UNIX_TIMESTAMP(created_at) created FROM messages INNER JOIN users USING (uid) WHERE tid = ? ORDER BY created_at', tid
-  @path = "./www/attachment/#{@thread[:tid]}-#{@thread[:attachment]}"
-  @size = nil
-  # if (is_readable($path) && is_file($path))
-    # $size = filesize($path);
+  @path = "#{ATTACHMENT_DIR}/#{@thread[:tid]}-#{@thread[:attachment]}"
+  @size = File.readable?(@path) && File.size(@path)
   erb :thread
+end
+
+get '/attachment/*/*' do |tid, filename|
+  session!
+  @path = "#{ATTACHMENT_DIR}/#{tid}-#{filename}"
+  not_found unless File.readable? @path
+  send_file @path
 end
 
 get '/thread/*/*' do |tid, modifier|
@@ -187,27 +192,26 @@ end
 
 post '/edit_thread/*' do |tid|
   if params[:subject] =~ /\S/
+    attachment = params[:attachment]
     unless params[:tid] and not params[:tid].empty?
       tid = insert :threads,
         :subject => params[:subject],
         :message => params[:message],
         :fid => params[:fid],
         :created_at => now,
-        :uid => params[:uid]
-      # array('attachment' => strval($_FILES['attachment']['name'])));
+        :uid => params[:uid],
+        :attachment => attachment && attachment[:filename]
     else
       update :threads, 'tid = ? AND uid = ?', params[:tid], session[:uid],
         :subject => params[:subject],
-        :message => params[:message]
-      if nil # if ($_FILES['attachment']['name']) {
-        update :threads, 'tid = ? AND uid = ?', params['tid'], session[:uid],
-          :attachment => $_FILES['attachment']['name']
-      end
+        :message => params[:message],
+        :attachment => attachment && attachment[:filename]
       tid = params[:tid]
     end
     if tid
-      if nil #file = $_FILES['attachment']
-        # FileUtils.mv $file['tmp_name'], ROOT . "/www/attachment/$tid-{$file['name']}");
+      if attachment && attachment[:filename]
+        FileUtils.cp attachment[:tempfile],
+          "#{ATTACHMENT_DIR}/#{tid}-#{attachment[:filename]}"
       end
       redirect to "/thread/#{tid}"
     end
@@ -219,7 +223,7 @@ get '/delete_thread/*' do |tid|
   session!
   thread = fetch_one 'SELECT fid, tid, attachment FROM threads WHERE tid = ? LIMIT 1', tid
   if delete :threads, 'tid = ? AND uid = ?', tid, session[:uid]
-    FileUtils.rm_f File.join(ATTACHMENT_DIR, "#{thread[:tid]}-#{thread[:attachment]}")
+    FileUtils.rm_f "#{ATTACHMENT_DIR}/#{thread[:tid]}-#{thread[:attachment]}"
     redirect to "/forum/#{thread[:fid]}"
   end
   error 204
