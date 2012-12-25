@@ -22,7 +22,7 @@ Encoding.default_external = Encoding::UTF_8
 
 set :layout, true
 set :session_name, 'yutarbbs'
-set :session_secret, ''
+set :session_secret, "#{__FILE__}#{ATTACHMENT_DIR}#{EMOTICON_DIR}"
 
 helpers Yutarbbs, Yutarbbs::Text
 include Yutarbbs::Database
