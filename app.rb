@@ -35,7 +35,7 @@ end
 
 get '/gateway' do
   session_end!
-  redirect back
+  redirect to '/'
 end
 
 post '/gateway' do
@@ -55,6 +55,7 @@ post '/gateway' do
 end
 
 get '/login' do
+  redirect to '/' if session?
   erb :auth
 end
 
