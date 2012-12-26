@@ -13,11 +13,11 @@
 </h3>
 <ol id="list">
 <% @threads.each_with_index do |thread, index| %>
-<li class="<%= 'a' if index.odd? %>"><a href="<%= u('thread', thread[:tid]) %>">
-    <span class=subject><%= h(thread[:subject]) %><% if thread[:replies] %> <small class=replies><%= number_format(thread[:replies]) %></small><% end %> <%= '<em>*</em>' if thread[:updated] && thread[:updated].nonzero? %> <% if thread[:attachment] && ! thread[:attachment].empty? %><span class=attachment>첨부</span><% end %></span>
-    <span class=author><small class=year><%= '%02d' % thread[:year] %></small><%= h(thread[:name]) %></span>
-    <span class=date><%= formatdate(thread[:created]) %></span>
-    <span class=hits><%= number_format(thread[:hits]) %></span>
+<li class="<%= 'a' if index.odd? %>"><a href="<%= u('thread', thread.id) %>">
+    <span class=subject><%= h(thread.subject) %><% if thread.messages.length > 0 %> <small class=replies><%= number_format(thread.messages.length) %></small><% end %> <%= '<em>*</em>' if latest_message = thread.messages.max_by(&:created_at) and latest_message.created_at.to_time > Time.now - 86400 %> <% if thread.attachment && ! thread.attachment.empty? %><span class=attachment>첨부</span><% end %></span>
+    <span class=author><small class=year><%= '%02d' % thread.user.year %></small><%= h(thread.user.name) %></span>
+    <span class=date><%= formatdate(thread.created_at.to_time) %></span>
+    <span class=hits><%= number_format(thread.hits) %></span>
 </a></li>
 <% end %>
 </ol>

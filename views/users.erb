@@ -11,11 +11,11 @@
 
 <% @users.each_with_index do |user, index| %>
 <tr class="<%= 'a' if index.odd? %>">
-<td><%= '%02d' % user[:year] %>
-<td><%= h(user[:name]) %>
-<td><%= h(formatphone(user[:phone])) %><br>
-    <a class=email href="mailto:<%= h(user[:email]) %>"><%= h(user[:email]) %></a>
-<td><%= formattext(user[:remark]) %></td>
+<td><%= '%02d' % user.year %>
+<td><%= h(user.name) %>
+<td><%= h(formatphone(user.phone)) %><br>
+    <a class=email href="mailto:<%= h(user.email) %>"><%= h(user.email) %></a>
+<td><%= formattext(user.remark) %></td>
 <% end %>
 
 </table>

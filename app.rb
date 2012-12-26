@@ -8,7 +8,7 @@ require 'yutarbbs'
 require 'builder'
 also_reload 'lib/yutarbbs' if development?
 also_reload 'lib/yutarbbs/text' if development?
-also_reload 'lib/yutarbbs/database' if development?
+also_reload 'lib/yutarbbs/model' if development?
 
 raise "ATTACHMENT_DIR is not set." unless ENV['ATTACHMENT_DIR']
 ATTACHMENT_DIR = File.expand_path ENV['ATTACHMENT_DIR']
@@ -25,11 +25,11 @@ set :session_name, 'yutarbbs'
 set :session_secret, "#{__FILE__}#{ATTACHMENT_DIR}#{EMOTICON_DIR}"
 
 helpers Yutarbbs, Yutarbbs::Text
-include Yutarbbs::Database
+include Yutarbbs::Model
 
 get '/' do
-  @notice = fetch_one 'SELECT * FROM threads WHERE fid = 1 ORDER BY created_at DESC'
-  redirect to "/thread/#{@notice[:tid]}" if session?
+  @notice = Article.latest 1
+  redirect to "/thread/#{@notice.id}" if session?
   erb :index
 end
 
@@ -39,15 +39,18 @@ get '/gateway' do
 end
 
 post '/gateway' do
-  user = fetch_one 'SELECT uid, year, name, userid, IFNULL(updated_on + INTERVAL 3 MONTH, 0) < NOW() outdated FROM users WHERE userid = ? AND passwd = ? LIMIT 1', params[:userid], hashpasswd(params[:passwd])
+  user = User.first(
+    userid: params[:userid],
+    passwd: hashpasswd(params[:passwd]))
+  outdated = Time.now - user.updated_on.to_time > 90 * 24 * 60 * 60 # 3 months
   if user
     session_start!
-    user.each do |k,v|
-      session[k] = v unless k == :outdated
+    %w/id year name userid/.each do |k|
+      session[k.to_sym] = user[k]
     end
     # session[:persistent] = params[:persistent]
     puts user
-    redirect to '/me' if user[:outdated].nonzero?
+    redirect to '/me' if outdated
   else
     session_end!
   end
@@ -61,8 +64,7 @@ end
 
 get '/me' do
   session!
-  @user = fetch_one 'SELECT uid, userid, year, name, email, phone, remark, UNIX_TIMESTAMP(updated_on) updated FROM users WHERE uid = ?', session[:uid]
-  not_found unless @user
+  @user = User.get(session[:id]) or not_found
   erb :me
 end
 
@@ -70,8 +72,7 @@ post '/me' do
   session!
   if params[:passwd]
     if params[:passwd] == params[:passwd2]
-      passwd = hashpasswd params[:passwd]
-      if update :users, 'uid = ?', session[:uid], :passwd => passwd
+      if User.get(session[:id]).update passwd: hashpasswd(params[:passwd])
         alert '변경되었습니다.'
       else
         error 400, alert('변경 실패!')
@@ -80,19 +81,18 @@ post '/me' do
       error 400, alert('암호 이상해!')
     end
   elsif params[:phone]
-    puts now
-    update :users, 'uid = ?', session[:uid],
-      :email => params[:email],
-      :phone => params[:phone],
-      :remark => params[:remark],
-      :updated_on => now
+    User.get(session[:id]).update(
+      email: params[:email],
+      phone: params[:phone],
+      remark: params[:remark],
+      updated_on: Time.now)
     redirect back
   end
 end
 
 get '/users' do
   session!
-  @users = fetch_all 'SELECT year, name, email, phone, remark FROM users ORDER BY year DESC, name'
+  @users = User.all :order => [ :year.desc, :name ]
   erb :users
 end
 
@@ -101,19 +101,16 @@ get '/forum/*/*' do |fid, page|
   @fid = fid.to_i
   not_found unless forum_name[@fid]
   @page = [ 1, page.to_i ].max
-  @max_page = fetch_one('SELECT GREATEST(1, CEILING(COUNT(*) / 15)) n FROM threads WHERE fid = ?', fid)[:n].to_i
+  @max_page = [ 1, (Article.count(fid: fid) + 14) / 15 ].max
   if @keyword = params[:keyword]
-    @threads = fetch_all 'SELECT tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, hits, attachment FROM threads INNER JOIN users USING (uid) WHERE fid = ? AND (UPPER(name) = UPPER(?) OR INSTR(UPPER(subject), UPPER(?)) OR INSTR(UPPER(message), UPPER(?))) ORDER BY created_at DESC', fid, @keyword, @keyword, @keyword
+    # @threads = fetch_all 'SELECT tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, hits, attachment FROM threads INNER JOIN users USING (uid) WHERE fid = ? AND (UPPER(name) = UPPER(?) OR INSTR(UPPER(subject), UPPER(?)) OR INSTR(UPPER(message), UPPER(?))) ORDER BY created_at DESC', fid, @keyword, @keyword, @keyword
+    articles = Article.all fid: fid
+    @threads = articles(name: @keyword) +
+      articles(:subject.like => "%#{@keyword}%") +
+      articles(:message.like => "%#{@keyword}%")
   else
-    @threads = fetch_all "SELECT tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, hits, attachment FROM threads INNER JOIN users USING (uid) WHERE fid = ? ORDER BY created_at DESC LIMIT #{@page * 15 - 15}, 15", fid
-  end
-
-  if @threads.length.nonzero?
-    tids = @threads.map { |e| e[:tid] } * ','
-    rs = fetch_all "SELECT tid, COUNT(tid) replies, MAX(created_at) + INTERVAL 1 DAY > NOW() updated FROM messages WHERE tid IN (#{tids}) GROUP BY tid"
-    @threads.each do |e|
-      e.update rs.find { |r| r[:tid] == e[:tid] } || {}
-    end
+    @threads = Article.all fid: fid, order: [ :id.desc ],
+      offset: @page * 15 - 15, limit: 15
   end
 
   erb :forum
@@ -123,14 +120,14 @@ get '/forum/*' do |fid|
   call env.merge 'PATH_INFO' => "/forum/#{fid}/1"
 end
 
-get '/thread/*/*' do |tid, modifier|
+get '/thread/*/*' do |id, modifier|
   case modifier
   when 'next'
-    thread = fetch_one 'SELECT b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid<a.tid ORDER BY b.tid DESC LIMIT 1', tid
+    article = Article.first fid: Article.get(id).fid, :id.lt => id, order: [ :id.desc ]
   when 'prev'
-    thread = fetch_one 'SELECT b.tid FROM threads a, threads b WHERE a.tid=? AND b.fid=a.fid AND b.tid>a.tid ORDER BY b.tid LIMIT 1', tid
+    article = Article.first fid: Article.get(id).fid, :id.gt => id, order: [ :id.asc ]
   end
-  redirect to "/thread/#{thread[:tid]}" if thread
+  redirect to "/thread/#{article.id}" if article
   error 204
 end
 
@@ -138,13 +135,12 @@ get '/thread/*' do |tid|
   session!
   if cookies[:lasttid] != tid
     cookies[:lasttid] = tid
-    update :threads, 'tid=? AND uid!=?', tid, session[:uid], 'hits=hits+1'
+    # update :threads, 'tid=? AND uid!=?', tid, session[:id], 'hits=hits+1'
   end
-  @thread = fetch_one 'SELECT tid, fid, subject, t.uid, year, name, phone, email, remark, message, UNIX_TIMESTAMP(created_at) created, NULLIF(attachment, "") attachment FROM threads t INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', tid
+  @thread = Article.get tid
   not_found unless @thread
-  @messages = fetch_all 'SELECT mid, message, uid, year, name, UNIX_TIMESTAMP(created_at) created FROM messages INNER JOIN users USING (uid) WHERE tid = ? ORDER BY created_at', tid
-  @path = "#{ATTACHMENT_DIR}/#{@thread[:tid]}-#{@thread[:attachment]}"
-  @size = File.readable?(@path) && File.size(@path)
+  path = "#{ATTACHMENT_DIR}/#{@thread.id}-#{@thread.attachment}"
+  @size = File.readable?(path) && File.size(path)
   erb :thread
 end
 
@@ -156,21 +152,21 @@ get '/attachment/*/*' do |tid, filename|
 end
 
 get '/rss' do
-  @threads = fetch_all 'SELECT fid, tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, message FROM threads INNER JOIN users USING (uid) ORDER BY created_at DESC LIMIT 20'
+  threads = Article.all order: [ :id.desc ], limit: 20
   content_type 'application/rss+xml'
   Builder::XmlMarkup.new.rss :version => '2.0' do |xml|
     xml.channel do
       xml.title 'yutar.net'
       xml.link to '/'
       xml.description 'yutar. the premium.'
-      @threads.each do |thread|
+      threads.each do |thread|
         xml.item do
-          xml.title "[#{forum_name[thread[:fid]]}] #{thread[:subject]}"
-          xml.link to "/thread/#{thread[:tid]}"
-          xml.description formattext(thread[:message]).gsub(/\n/, '<br/>')
-          xml.author "#{'%02d' % thread[:year]}#{thread[:name]}"
-          xml.pubDate Time.at(thread[:created]).strftime('%a, %-d %b %Y %T %z')
-          xml.category forum_name[thread[:fid]]
+          xml.title "[#{forum_name[thread.fid]}] #{thread.subject}"
+          xml.link to "/thread/#{thread.id}"
+          xml.description formattext(thread.message).gsub(/\n/, '<br/>')
+          xml.author "#{'%02d' % thread.user.year}#{thread.user.name}"
+          xml.pubDate thread.created_at.strftime('%a, %-d %b %Y %T %z')
+          xml.category forum_name[thread.fid]
         end
       end
     end
@@ -179,14 +175,13 @@ end
 
 get '/edit_thread/forum/*' do |fid|
   session!
-  @thread = { :fid => fid.to_i, :tid => 0 }
+  @thread = Article.new fid: fid.to_i
   erb :edit_thread
 end
 
 get '/edit_thread/*' do |tid|
   session!
-  @thread = fetch_one 'SELECT tid, fid, subject, message, UNIX_TIMESTAMP(created_at) created FROM threads INNER JOIN users USING (uid) WHERE tid = ? LIMIT 1', tid
-  not_found unless @thread
+  @thread = Article.get(tid) or not_found
   erb :edit_thread
 end
 
@@ -194,29 +189,31 @@ post '/edit_thread/forum/*' do |fid|
   session!
   error 204 if params[:subject] !~ /\S/
   attachment = params[:attachment]
-  tid = insert :threads,
-    :subject => params[:subject],
-    :message => params[:message],
-    :fid => fid,
-    :created_at => now,
-    :uid => session[:uid],
-    :attachment => attachment && attachment[:filename] || ''
-  error unless tid
+  thread = Article.create(
+    subject: params[:subject],
+    message: params[:message],
+    fid: fid,
+    created_at: Time.now,
+    uid: session[:id],
+    attachment: attachment && attachment[:filename] || '',
+  )
+  error unless thread.saved?
   if attachment && attachment[:filename]
     store attachment[:tempfile],
-      "#{ATTACHMENT_DIR}/#{tid}-#{attachment[:filename]}"
+      "#{ATTACHMENT_DIR}/#{thread.id}-#{attachment[:filename]}"
   end
-  redirect to "/thread/#{tid}"
+  redirect to "/thread/#{thread.id}"
 end
 
 post '/edit_thread/*' do |tid|
   session!
   error 204 if params[:subject] !~ /\S/
   attachment = params[:attachment]
-  update :threads, 'tid = ? AND uid = ?', tid, session[:uid],
-    :subject => params[:subject],
-    :message => params[:message],
-    :attachment => attachment && attachment[:filename] || ''
+  Article.all(uid: session[:id]).get(tid).update(
+    subject: params[:subject],
+    message: params[:message],
+    attachment: attachment && attachment[:filename] || '',
+  )
   if attachment && attachment[:filename]
     store attachment[:tempfile],
       "#{ATTACHMENT_DIR}/#{tid}-#{attachment[:filename]}"
@@ -226,27 +223,27 @@ end
 
 get '/delete_thread/*' do |tid|
   session!
-  thread = fetch_one 'SELECT fid, tid, attachment FROM threads WHERE tid = ? LIMIT 1', tid
-  not_found unless thread
-  delete :threads, 'tid = ? AND uid = ?', tid, session[:uid]
-  FileUtils.rm_f "#{ATTACHMENT_DIR}/#{tid}-#{thread[:attachment]}"
-  redirect to "/forum/#{thread[:fid]}"
+  thread = Article.all(uid: session[:id]).get(tid) or not_found
+  if thread.destroy
+    FileUtils.rm_f "#{ATTACHMENT_DIR}/#{tid}-#{thread.attachment}"
+  end
+  redirect to "/forum/#{thread.fid}"
 end
 
 get '/delete_message/*' do |mid|
   session!
-  delete :messages, 'mid = ? AND uid = ?', mid, session[:uid] if params[:y] == '1'
+  Message.all(uid: session[:id]).get(mid).destroy if params[:y]
   redirect back
 end
 
 post '/message' do
   session!
-  not_found unless params[:tid]
-  insert :messages,
-    :tid => params[:tid],
-    :message => params[:message],
-    :created_at => now,
-    :uid => session[:uid]
+  Message.create(
+    tid: params[:tid],
+    message: params[:message],
+    created_at: Time.now,
+    uid: session[:id],
+  )
   redirect back
 end
 
