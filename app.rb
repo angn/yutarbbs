@@ -4,6 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'sinatra/session'
 require "sinatra/cookies"
+require 'rack/utils'
 require 'yutarbbs'
 require 'builder'
 also_reload 'lib/yutarbbs' if development?
@@ -25,7 +26,10 @@ enable :layout
 set :session_name, 'yutarbbs'
 set :session_secret, "#{__FILE__}#{ATTACHMENT_DIR}#{EMOTICON_DIR}"
 
-helpers Yutarbbs, Yutarbbs::Text
+helpers Rack::Utils, Yutarbbs, Yutarbbs::Text
+helpers do
+  alias_method :h, :escape_html
+end
 include Yutarbbs::Model
 
 before do

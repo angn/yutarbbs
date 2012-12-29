@@ -8,10 +8,6 @@ module Yutarbbs::Text
     "<script>alert(#{text.to_json});history.back()</script>"
   end
 
-  def h text
-    CGI.escape_html text.to_s
-  end
-  
   def formattext text
     chunks = text.split %r{(<[a-z]+[^>]*>|</[a-z]+[^>]*>)}i
     text = chunks.map { |e| _formattexteach e } * ''
