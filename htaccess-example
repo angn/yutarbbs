@@ -1,6 +1,0 @@
-## An example of www/.htaccess
-
-# URL transformation
-RewriteEngine On
-RewriteRule ^attachment/([0-9]+)/(.+)$ attachment/$1-$2 [L]
-RewriteRule ^[^.]+$ index.php [L]
