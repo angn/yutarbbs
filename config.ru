@@ -1,3 +1,4 @@
 $:.unshift File.expand_path '../lib', __FILE__
-require './app.rb'
-run Sinatra::Application
+ROOT = File.expand_path '..', __FILE__
+require 'yutarbbs'
+run Yutarbbs::WebApp

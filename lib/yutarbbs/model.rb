@@ -2,7 +2,7 @@ require 'dm-core'
 require 'dm-aggregates'
 require 'dm-adjust'
 
-module Yutarbbs::Model
+module Yutarbbs
 
   DataMapper::Logger.new $stdout, :debug
   
