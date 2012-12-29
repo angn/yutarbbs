@@ -1,5 +1,6 @@
 require 'dm-core'
 require 'dm-aggregates'
+require 'dm-adjust'
 
 module Yutarbbs::Model
 
@@ -14,14 +15,16 @@ module Yutarbbs::Model
     include DataMapper::Resource
 
     property :id, Serial, field: 'uid'
-    property :userid, String
-    property :passwd, String
-    property :name, String
-    property :year, Integer
-    property :phone, String
-    property :email, String
-    property :remark, Text
-    property :updated_on, Date
+    property :userid, String, required: true, lazy: [ :detail ]
+    property :passwd, String, required: true, lazy: true
+    property :name, String, required: true
+    property :year, Integer, required: true
+    property :phone, String, required: true, lazy: [ :detail ]
+    property :email, String, required: true, lazy: [ :detail ]
+    property :remark, Text, required: true, lazy: [ :detail ]
+    property :updated_on, Date, required: true, lazy: [ :detail ]
+
+    has n, :articles, parent_key: [ :id ], child_key: [ :uid ]
   end
 
   class Article
@@ -30,29 +33,24 @@ module Yutarbbs::Model
     storage_names[:default] = 'threads'
 
     property :id, Serial, field: 'tid'
-    property :fid, Integer
-    property :cid, Integer
-    property :subject, String
-    property :message, Text
-    property :created_at, DateTime
-    property :hits, Integer
+    property :fid, Integer, required: true
+    property :subject, String, required: true
+    property :message, Text, required: true
+    property :created_at, DateTime, required: true
+    property :hits, Integer, required: true
     property :attachment, String
 
     belongs_to :user, child_key: [ :uid ], parent_key: [ :id ]
 
-    has n, :messages, 'Message', parent_key: [ :id ], child_key: [ :tid ]
-
-    def self.latest forum_id
-      first(forum_id, order: :created_at.desc)[0]
-    end
+    has n, :messages, parent_key: [ :id ], child_key: [ :tid ]
   end
 
   class Message
     include DataMapper::Resource
 
     property :id, Serial, field: 'mid'
-    property :message, Text
-    property :created_at, DateTime
+    property :message, Text, required: true
+    property :created_at, DateTime, required: true
 
     belongs_to :user, child_key: [ :uid ], parent_key: [ :id ]
     belongs_to :article, child_key: [ :tid ]

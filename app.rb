@@ -20,7 +20,8 @@ raise "#{EMOTICON_DIR} doesn't exist." unless File.directory? EMOTICON_DIR
 
 Encoding.default_external = Encoding::UTF_8
 
-set :layout, true
+disable :dump_errors
+enable :layout
 set :session_name, 'yutarbbs'
 set :session_secret, "#{__FILE__}#{ATTACHMENT_DIR}#{EMOTICON_DIR}"
 
@@ -28,7 +29,7 @@ helpers Yutarbbs, Yutarbbs::Text
 include Yutarbbs::Model
 
 get '/' do
-  @notice = Article.latest 1
+  @notice = Article.last fid: 1
   redirect to "/thread/#{@notice.id}" if session?
   erb :index
 end
@@ -102,12 +103,11 @@ get '/forum/*/*' do |fid, page|
   not_found unless forum_name[@fid]
   @page = [ 1, page.to_i ].max
   @max_page = [ 1, (Article.count(fid: fid) + 14) / 15 ].max
-  if @keyword = params[:keyword]
-    # @threads = fetch_all 'SELECT tid, subject, year, name, UNIX_TIMESTAMP(created_at) created, hits, attachment FROM threads INNER JOIN users USING (uid) WHERE fid = ? AND (UPPER(name) = UPPER(?) OR INSTR(UPPER(subject), UPPER(?)) OR INSTR(UPPER(message), UPPER(?))) ORDER BY created_at DESC', fid, @keyword, @keyword, @keyword
+  if @keyword = params[:q]
+    @threads = User.all(name: @keyword).articles(fid: fid)
     articles = Article.all fid: fid
-    @threads = articles(name: @keyword) +
-      articles(:subject.like => "%#{@keyword}%") +
-      articles(:message.like => "%#{@keyword}%")
+    @threads += articles.all(:subject.like => "%#{@keyword}%")
+    @threads += articles.all(:message.like => "%#{@keyword}%")
   else
     @threads = Article.all fid: fid, order: [ :id.desc ],
       offset: @page * 15 - 15, limit: 15
@@ -135,10 +135,9 @@ get '/thread/*' do |tid|
   session!
   if cookies[:lasttid] != tid
     cookies[:lasttid] = tid
-    # update :threads, 'tid=? AND uid!=?', tid, session[:id], 'hits=hits+1'
+    Article.all(:uid.not => session[:id]).get(tid).adjust! hits: 1
   end
-  @thread = Article.get tid
-  not_found unless @thread
+  @thread = Article.get(tid) or not_found
   path = "#{ATTACHMENT_DIR}/#{@thread.id}-#{@thread.attachment}"
   @size = File.readable?(path) && File.size(path)
   erb :thread
@@ -269,4 +268,8 @@ get '/emo/*' do |name|
   path = candidates.find { |path| File.readable? path }
   not_found unless path
   send_file path
+end
+
+error DataObjects::SQLError do
+  halt 500, 'no database connection'
 end
