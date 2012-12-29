@@ -28,6 +28,11 @@ set :session_secret, "#{__FILE__}#{ATTACHMENT_DIR}#{EMOTICON_DIR}"
 helpers Yutarbbs, Yutarbbs::Text
 include Yutarbbs::Model
 
+before do
+  env['rack.session.options'][:expire_after] =
+    cookies['keeplogin'] ? 60 * 60 * 24 * 14 : nil
+end
+
 get '/' do
   @notice = Article.last fid: 1
   redirect to "/thread/#{@notice.id}" if session?
@@ -49,8 +54,8 @@ post '/gateway' do
     %w/id year name userid/.each do |k|
       session[k.to_sym] = user[k]
     end
-    # session[:persistent] = params[:persistent]
-    puts user
+    response.set_cookie :keeplogin, value: '1',
+      expires: params[:keeplogin] ? Time.now + 365 * 86400 : Time.at(0)
     redirect to '/me' if outdated
   else
     session_end!
