@@ -3,8 +3,8 @@ require 'dm-aggregates'
 require 'dm-adjust'
 
 module Yutarbbs
-
-  DataMapper::Logger.new $stdout, :debug
+  DataMapper::Logger.new $stdout,
+    ENV['RACK_ENV'] == 'development' ? :debug : :warn
   
   DataMapper.setup :default, 'mysql://yutar@127.0.0.1/yutar'
 
