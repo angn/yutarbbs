@@ -26,8 +26,8 @@ module Yutarbbs
 
     get '/emo/*' do |name|
       candidates = IMAGE_EXT.map { |ext| "#{EMOTICON_DIR}/#{name}.#{ext}" }
-      path = candidates.find { |e| File.readable? e } or halt 404
-      send_file path
+      filename = candidates.find { |e| File.readable? e } or halt 404
+      send_file filename
     end
   end
 end

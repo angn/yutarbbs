@@ -8,14 +8,14 @@ module Yutarbbs
 
     get '/' do
       @notice = Article.last fid: 1
-      redirect to "/thread/#{@notice.id}" if session?
+      redirect "/thread/#{@notice.id}", 303 if session?
       erb :index
     end
 
     get '/forum/*/*' do |fid, page|
       session!
       @fid = fid.to_i
-      not_found unless forum_name[@fid]
+      halt 404 unless forum_name[@fid]
       @page = [ 1, page.to_i ].max
       @max_page = [ 1, (Article.count(fid: fid) + 14) / 15 ].max
       if @keyword = params[:q]
@@ -42,8 +42,8 @@ module Yutarbbs
       when 'prev'
         article = Article.first fid: Article.get(id).fid, :id.gt => id, order: [ :id.asc ]
       end
-      redirect to "/thread/#{article.id}" if article
-      error 204
+      redirect "/thread/#{article.id}", 303 if article
+      205
     end
 
     get '/thread/*' do |tid|
@@ -52,7 +52,7 @@ module Yutarbbs
         cookies[:lasttid] = tid
         Article.all(:uid.not => session[:id]).get(tid).adjust! hits: 1
       end
-      @thread = Article.get(tid) or not_found
+      @thread = Article.get(tid) or halt 404
       path = "#{ATTACHMENT_DIR}/#{@thread.id}-#{@thread.attachment}"
       @size = File.readable?(path) && File.size(path)
       erb :thread
@@ -61,7 +61,7 @@ module Yutarbbs
     get '/attachment/*/*' do |tid, filename|
       session!
       @path = "#{ATTACHMENT_DIR}/#{tid}-#{filename}"
-      not_found unless File.readable? @path
+      halt 404 unless File.readable? @path
       send_file @path
     end
 
@@ -95,13 +95,13 @@ module Yutarbbs
 
     get '/edit_thread/*' do |tid|
       session!
-      @thread = Article.get(tid) or not_found
+      @thread = Article.get(tid) or halt 404
       erb :edit_thread
     end
 
     post '/edit_thread/forum/*' do |fid|
       session!
-      error 204 if params[:subject] !~ /\S/
+      halt 204 if params[:subject] !~ /\S/
       attachment = params[:attachment]
       thread = Article.create(
         subject: params[:subject],
@@ -111,17 +111,17 @@ module Yutarbbs
         uid: session[:id],
         attachment: attachment && attachment[:filename] || '',
       )
-      error unless thread.saved?
+      halt unless thread.saved?
       if attachment && attachment[:filename]
         store attachment[:tempfile],
           "#{ATTACHMENT_DIR}/#{thread.id}-#{attachment[:filename]}"
       end
-      redirect to "/thread/#{thread.id}"
+      redirect "/thread/#{thread.id}", 303
     end
 
     post '/edit_thread/*' do |tid|
       session!
-      error 204 if params[:subject] !~ /\S/
+      halt 204 if params[:subject] !~ /\S/
       attachment = params[:attachment]
       Article.all(uid: session[:id]).get(tid).update(
         subject: params[:subject],
@@ -132,16 +132,16 @@ module Yutarbbs
         store attachment[:tempfile],
           "#{ATTACHMENT_DIR}/#{tid}-#{attachment[:filename]}"
       end
-      redirect to "/thread/#{tid}"
+      redirect "/thread/#{tid}", 303
     end
 
     get '/delete_thread/*' do |tid|
       session!
-      thread = Article.all(uid: session[:id]).get(tid) or not_found
+      thread = Article.all(uid: session[:id]).get(tid) or halt 404
       if thread.destroy
         FileUtils.rm_f "#{ATTACHMENT_DIR}/#{tid}-#{thread.attachment}"
       end
-      redirect to "/forum/#{thread.fid}"
+      redirect "/forum/#{thread.fid}", 303
     end
   end
 end

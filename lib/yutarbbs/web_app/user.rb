@@ -4,7 +4,7 @@ module Yutarbbs
   class WebApp
     get '/gateway' do
       session_end!
-      redirect to '/'
+      redirect '/', 303
     end
 
     def hashpasswd text
@@ -23,7 +23,7 @@ module Yutarbbs
         end
         response.set_cookie :keeplogin, value: '1',
           expires: params[:keeplogin] ? Time.now + 365 * 86400 : Time.at(0)
-        redirect to '/me' if outdated
+        redirect '/me', 303 if outdated
       else
         session_end!
       end
