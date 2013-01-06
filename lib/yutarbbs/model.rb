@@ -37,8 +37,8 @@ module Yutarbbs
     property :subject, String, required: true
     property :message, Text, required: true
     property :created_at, DateTime, required: true
-    property :hits, Integer, required: true
-    property :attachment, String
+    property :hits, Integer, default: 0
+    property :attachment, String, default: ''
 
     belongs_to :user, child_key: [ :uid ], parent_key: [ :id ]
 
