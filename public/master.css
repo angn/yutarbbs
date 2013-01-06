@@ -669,10 +669,6 @@ a.twit:hover:before {
         box-shadow: none;
     }
 
-    .github {
-        display: none;
-    }
-
     body:after {
         content: '';
     }
@@ -848,6 +844,12 @@ a.twit:hover:before {
         background-position: center;
     }
 
+}
+
+@media only screen and (max-width: 1023px) {
+    .github {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 479px) {
