@@ -138,18 +138,6 @@ del {
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
-address {
-    position: fixed;
-    right: 1ex;
-    bottom: 1ex;
-    font: 75% Tahoma,sans-serif;
-}
-
-address a {
-    color: #fff;
-    text-shadow: 0 1px 2px #000;
-}
-
 h1 {
     overflow: hidden;
     width: 750px;
@@ -681,7 +669,7 @@ a.twit:hover:before {
         box-shadow: none;
     }
 
-    address {
+    .github {
         display: none;
     }
 
