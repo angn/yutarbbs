@@ -50,7 +50,7 @@ module Yutarbbs
       session!
       if cookies[:lasttid] != tid
         cookies[:lasttid] = tid
-        Article.all(:uid.not => session[:id]).get(tid).adjust! hits: 1
+        Article.all(id: tid, :uid.not => session[:id]).adjust! hits: 1
       end
       @thread = Article.get(tid) or halt 404
       path = "#{ATTACHMENT_DIR}/#{@thread.id}-#{@thread.attachment}"
