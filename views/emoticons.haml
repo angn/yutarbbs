@@ -1,0 +1,9 @@
+%h2 이모티콘
+%form(method="post" enctype="multipart/form-data")
+  %p
+    %input(type="file" name="emoticon")
+    %input(type="submit" value="올리기 ▶")
+%ul.emoticons
+  - @emoticons.each do |name|
+    %li
+      %a(href="/emo/#{name}")= name

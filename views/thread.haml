@@ -1,0 +1,82 @@
+%h2= forum_name[@thread.fid]
+
+.thread
+  %p.nav
+    %a(href="/forum/#{@thread.fid}" accesskey="u") 목록
+    %a(href="/thread/#{@thread.id}/prev" accesskey="p") 이전
+    %a(href="/thread/#{@thread.id}/next" accesskey="n") 다음
+    
+  %h3= @thread.subject
+
+  %p.info
+    %span.author
+      %small>= '%02d' % @thread.user.year
+      = @thread.user.name
+    %span.date
+      = formattime @thread.created_at.to_time
+      - if @thread.uid == session[:id]
+        &mdash;
+        %a(href="/edit_thread/#{@thread.id}" accesskey="e") 수정
+        ·
+        %a(href="/delete_thread/#{@thread.id}" onclick="return confirm('아 정말요?')")
+          %em 삭제
+
+  - if @size
+    %blockquote.attachment
+      %a(href="/attachment/#{@thread.id}/#{@thread.attachment}")= @thread.attachment
+      %small= "(#{number_format @size >> 10}KB)"
+      %br
+      - if @thread.attachment =~ /\.(jpe?g|gif|png|bmp)$/i
+        %img(src="/attachment/#{@thread.id}/#{@thread.attachment}" alt="#{@thread.attachment}")
+
+  .article<
+    %p= preserve formattext @thread.message
+
+  %p.remark<
+    - author = @thread.user
+    %strong= '%02d%s' % [ author.year, author.name ]
+    - if author.phone
+      = "☎ #{formatphone author.phone}"
+    - if author.email
+      %a(href="mailto:#{author.email}")= author.email
+    = preserve formattext author.remark
+
+  %h4 “...!”
+  %dl
+    - (messages = @thread.messages).each_with_index do |message, index|
+      - author = message.user
+      - message.message.gsub! /^(1{3,})(?=\s)/m, %Q[<a href="#" onclick="return follow1s('#{index}','\\1')">\\1</a>]
+      %dt.info
+        %span.author
+          %small>= '%02d' % author.year
+          - if author.name == "\uAE40\uD6A8\uC2B9"
+            != "#{author.name}이<sup>UTF-8</sup>"
+          - elsif author.name == "\uAD6C\uC885\uB9CC"
+            %a(href="/thread/6570" style="font-family:Arial Narrow,Arial,sans-serif;font-stretch:condensed;font-weight:400") &#32;Koo's open mind
+          - else
+            = author.name
+        %span.date= formattime message.created_at.to_time
+        - if session[:id] == message.uid
+          %a.hid(href="/delete_message/#{message.id}" onclick="return validate(this)")
+            %em 삭제
+        - else
+          %a.hid(href="#" onclick="return add1s(#{messages.size - index})") 답글1
+
+      %dd.article(id="comment#{index}")<
+        %p= preserve replace_emoticons formattext message.message
+
+    %dt.info
+      %span.author
+        %small>= '%02d' % session[:year]
+        = session[:name]
+      %span.date 지금
+    %dd
+      %form(name="comment" method="post" action="/message")
+        %input(type="hidden" name="tid" value="#{@thread.id}")
+        %p
+          %textarea(name="message" cols=40 rows=5 accesskey="m" placeholder="댓글 쓰기" onfocus="this.form.className='lazyinit';scrollBy(0,999)")
+        %p.lazy
+          %small &lt;tex&gt;\code&lt;/tex&gt;
+        %p.lazy
+          %input(type="submit" accesskey="s" value="쓰기")
+    

@@ -2,7 +2,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/session'
 require 'sinatra/cookies'
-require 'rack/utils'
+require 'haml'
 
 Encoding.default_external = Encoding::UTF_8
 
@@ -20,11 +20,7 @@ module Yutarbbs
     set :session_name, 'yutarbbs'
     set :session_secret, __FILE__
 
-    helpers Rack::Utils
     helpers Sinatra::Cookies
-    helpers do
-      alias_method :h, :escape_html
-    end
     helpers Helpers
     helpers Text
 

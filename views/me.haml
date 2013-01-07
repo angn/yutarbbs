@@ -1,0 +1,46 @@
+%h2 정보수정
+
+%form.me(method="post")
+  %h3= @user.userid
+  %table 
+    %tr
+      %th 이름
+      %td= @user.name
+    %tr
+      %th 학번
+      %td= '%02d' % @user.year
+    %tr
+      %th 이메일
+      %td
+        %input(type="text" name="email" size=40 value="#{@user.email}")
+    %tr
+      %th 전화번호
+      %td
+        %input(type="text" name="phone" size=40 value="#{@user.phone}")
+    %tr
+      %th 남김말
+      %td
+        %textarea(name="remark" cols=40 rows=8)= @user.remark
+    %tr
+      %th 최종 수정
+      %td= formatdate @user.updated_on.to_time
+    %tr
+      %th 
+      %td
+        %input(type="submit" value="저장 ▶" accesskey="s")
+
+%form.me(method="post")
+  %h3 암호 변경
+  %table 
+    %tr
+      %th 암호
+      %td
+        %input(type="password" name="passwd")
+    %tr
+      %th 한 번 더
+      %td
+        %input(type="password" name="passwd2")
+    %tr
+      %th 
+      %td
+        %input(type="submit" value="변경 ▶")

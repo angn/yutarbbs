@@ -9,7 +9,7 @@ module Yutarbbs
     get '/' do
       @notice = Article.last fid: 1
       redirect "/thread/#{@notice.id}", 303 if session?
-      erb :index
+      haml :index
     end
 
     get '/forum/*/*' do |fid, page|
@@ -28,7 +28,7 @@ module Yutarbbs
           offset: @page * 15 - 15, limit: 15
       end
 
-      erb :forum
+      haml :forum
     end
 
     get '/forum/*' do |fid|
@@ -55,7 +55,7 @@ module Yutarbbs
       @thread = Article.get(tid) or halt 404
       path = "#{ATTACHMENT_DIR}/#{@thread.id}-#{@thread.attachment}"
       @size = File.readable?(path) && File.size(path)
-      erb :thread
+      haml :thread
     end
 
     get '/attachment/*/*' do |tid, filename|
@@ -90,13 +90,13 @@ module Yutarbbs
     get '/edit_thread/forum/*' do |fid|
       session!
       @thread = Article.new fid: fid.to_i
-      erb :edit_thread
+      haml :edit_thread
     end
 
     get '/edit_thread/*' do |tid|
       session!
       @thread = Article.get(tid) or halt 404
-      erb :edit_thread
+      haml :edit_thread
     end
 
     post '/edit_thread/forum/*' do |fid|

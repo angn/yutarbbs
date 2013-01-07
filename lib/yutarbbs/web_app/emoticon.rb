@@ -10,7 +10,7 @@ module Yutarbbs
       @emoticons = Dir.entries(EMOTICON_DIR)
       @emoticons.delete_if { |e| e[0] == '.' }
       @emoticons.each { |e| e.encode!('utf-8').sub! /\.[^.]*$/, '' }
-      erb :emoticons
+      haml :emoticons
     end
 
     post '/emoticons' do

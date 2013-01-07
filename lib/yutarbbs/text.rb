@@ -2,6 +2,7 @@
 
 require 'json'
 require 'cgi'
+require 'rack/utils'
 
 module Yutarbbs::Text
   def alert text
@@ -61,20 +62,17 @@ module Yutarbbs::Text
   end
 
   def number_format number
-    number.to_s.gsub /(?<=\d)(?=(\d\d\d)+)$/, ','
+    number.to_s.gsub /(?<=\d)(?=(\d\d\d)+$)/, ','
   end
   
-  def u *items
-    uri "/#{items * '/'}", false, false
-  end
-
   def forum_name
     %w/_ 공지 자유게시판 학술 PS 유타닷넷 운영 소모임 질문·토론 진로 테크/
   end
 
   def replace_emoticons html
     html.gsub /@([^@\/.\s]+)@/ do
-      %Q/<img src="#{u('emo', $1)}" alt="#{h $1}">/
+      html = Rack::Utils.escape_html $1
+      %Q[<img src="/emo/#{html}" alt="#{html}">]
     end
   end
 end

@@ -1,0 +1,33 @@
+!!! 5
+%html
+  %head
+    %meta(name="verify-v1" content="Vk1vAsUQPxHe0RgJW6YfJN3njmjm3VjxLPKADaq9SfA=")
+    %meta(charset="utf-8")
+    %title yutar.net
+    %link(rel="stylesheet" type="text/css" href="/master.css")
+    %meta(name="viewport" content="initial-scale=1.0,minimum-scale=1.0")
+    %script(src="/shortcut.js")
+  %body
+    .container
+      %h1
+        %a(href="/")
+          %big yutar. the premium.
+          %small Yonsei Informatics Specialists Since 1998
+      - if session?
+        %p.identity
+          %strong= session[:userid]
+          ·
+          %a.minor(href="/me") 수정
+          · 
+          %a(href="/gateway") 로그아웃
+        %p.menu<
+          - [ %w/` 1 2 3 4 5 6 7 8/, [ 1, 2, 8, 10, 9, 6, 3, 4, 7 ] ].transpose.each do |key, e|
+            %a(accesskey="#{key}" href="/forum/#{e}")<
+              = forum_name[e]
+              = '<em>*</em>' if is_forum_updated e
+            ·
+          %a.fade(accesskey=9 href="/users") 회원명부
+          · 
+          %a.fade.minor(accesskey=0 href="/emoticons") 이모티콘
+      = yield
+    %a.github(href="https://github.com/holies/yutarbbs" title="Fork me on GitHub")

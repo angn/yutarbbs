@@ -1,0 +1,11 @@
+%h2= forum_name[@thread.fid]
+.thread
+  %form(method="post" enctype="multipart/form-data")
+    %h3
+      %input(type="text" name="subject" size=80 value="#{@thread.subject}" autofocus)
+    .article<
+      %textarea(name="message" cols=80 rows=20)>= @thread.message
+      %small> &lt;tex&gt;\code&lt;/tex&gt;
+      %br
+      %input(type="file" name="attachment" size=30)>
+      %input(type="submit" accesskey="s" value="작성 ▶")

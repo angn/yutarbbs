@@ -1,0 +1,18 @@
+%h2 회원명부
+%table.users
+  %thead
+    %tr
+      %td 학번
+      %td 이름
+      %td 전화번호 · 이메일
+      %td 남김말
+  %tbody
+    - @users.each_with_index do |user, index|
+      %tr(class="#{'a' if index.odd?}")
+        %td= '%02d' % user.year
+        %td= user.name
+        %td
+          = formatphone user.phone
+          %br
+          %a(class="email" href="mailto:#{user.email}")= user.email
+        %td= preserve formattext user.remark

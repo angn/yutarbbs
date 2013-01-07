@@ -1,0 +1,53 @@
+%h2= forum_name[@fid]
+.forum
+  %form.search
+    %p
+      %input#search(type="search" name="q" placeholder="이 게시판에서 검색" accesskey="f" value=@keyword)>
+      %input(type="submit" value="검색")
+
+  %h3
+    %span.subject 주제
+    %span.author 글쓴이
+    %span.date 날짜
+    %span.hits 조회
+
+  %ol#list
+    - @threads.each_with_index do |thread, index|
+      %li(class="#{'a' if index.odd?}")
+        %a(href="/thread/#{thread.id}")
+          %span.subject
+            = thread.subject
+            - if thread.messages.length > 0
+              %small.replies= number_format thread.messages.length
+            - if latest_message = thread.messages.max_by(&:created_at)
+              - if latest_message.created_at
+                - if latest_message.created_at.to_time > Time.now - 86400
+                  = '<em>*</em>'
+            - if thread.attachment && ! thread.attachment.empty?
+              %span.attachment 첨부
+          %span.author<
+            %small.year= '%02d' % thread.user.year
+            = thread.user.name
+          %span.date= formatdate thread.created_at.to_time
+          %span.hits= number_format thread.hits
+
+  %form(onsubmit="location.href='/forum/#{@fid}/'+this.elements[0].value;return false")
+    %p.pages
+      - if @keyword
+        &nbsp;
+      - else
+        - if @page > 1
+          %a(href="/forum/#{@fid}/#{@page - 1}" accesskey="p") ◀ 이전
+        - else
+          %del ◀ 이전
+        ·
+        %input(size=2 value=@page)
+        \/
+        = number_format @max_page
+        ·
+        - if @page < @max_page
+          %a(href="/forum/#{@fid}/#{@page + 1}" accesskey="n") 다음 ▶
+        - else
+          %del 다음 ▶
+  %p.command
+    %a(href="/edit_thread/forum/#{@fid}" accesskey="w") 새 글 &para;
