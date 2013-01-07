@@ -598,15 +598,18 @@ a.twit:hover:before {
 }
 
 .github {
-    z-index: -1;
     position: absolute;
     top: 0;
     right: 0;
+    width: 140px;
+    height: 140px;
+    background: no-repeat 100% 0
+        url(https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png);
 }
 
-.github img {
-    display: block;
-    border: 0;
+a.github:hover {
+    background: no-repeat 100% 0
+        url(https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png);
 }
 
 @media only screen and (max-width: 767px) {
@@ -855,7 +858,9 @@ a.twit:hover:before {
         height: 24px;
         background-position: center;
     }
-    
+}
+
+@media only screen and (max-width: 1024px) {
     .github {
         display: none;
     }
