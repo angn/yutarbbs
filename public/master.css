@@ -597,6 +597,18 @@ a.twit:hover:before {
     margin: 1em;
 }
 
+.github {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.github img {
+    display: block;
+    border: 0;
+}
+
 @media only screen and (max-width: 767px) {
 
     html {
@@ -843,10 +855,7 @@ a.twit:hover:before {
         height: 24px;
         background-position: center;
     }
-
-}
-
-@media only screen and (max-width: 1023px) {
+    
     .github {
         display: none;
     }
