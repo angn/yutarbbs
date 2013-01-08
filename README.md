@@ -13,11 +13,13 @@ You're using Ubuntu 12.04, aren't you? I am.
 2. gem1.9 install bundler
 3. bundle install --without=production
 4. ATTACHMENT_DIR=. EMOTICON_DIR=. rackup
+5. curl -i localhost:9292
 
 
 Notes
 -----
 
+* In development env, "tester" account is created. (no password)
 * On windows, the sqlite dll is required in ruby bin directory.
   (Visit http://www.sqlite.org/download.html)
 * Recommend using RVM rather than the system ruby.
