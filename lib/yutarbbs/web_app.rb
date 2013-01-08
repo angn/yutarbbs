@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/session'
 require 'sinatra/cookies'
+require 'sinatra/config_file'
 require 'haml'
 
 Encoding.default_external = Encoding::UTF_8
@@ -10,8 +11,12 @@ module Yutarbbs
   class WebApp < Sinatra::Base
     register Sinatra::Reloader if development?
     register Sinatra::Session
+    register Sinatra::ConfigFile
 
-    disable :dump_errors if development?
+    config_file "#{ROOT}/config.yml"
+    Model.init settings
+
+    set :dump_errors, development?
     enable :logging
     enable :layout
     set :views, "#{ROOT}/views"

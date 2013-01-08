@@ -1,15 +1,21 @@
 require 'dm-core'
 require 'dm-aggregates'
 require 'dm-adjust'
+require 'dm-migrations'
 
 module Yutarbbs
-  DataMapper::Logger.new $stdout,
-    ENV['RACK_ENV'] == 'development' ? :debug : :warn
-  
-  DataMapper.setup :default, 'mysql://yutar@127.0.0.1/yutar'
+  module Model
+    def self.init settings
+      DataMapper::Logger.new $stdout, settings.debug ? :debug : :warn
+      
+      DataMapper.setup :default, settings.database
 
-  DataMapper.repository(:default).adapter.resource_naming_convention =
-    DataMapper::NamingConventions::Resource::UnderscoredAndPluralizedWithoutModule
+      DataMapper.repository(:default).adapter.resource_naming_convention =
+        DataMapper::NamingConventions::Resource::UnderscoredAndPluralizedWithoutModule
+
+      DataMapper.auto_upgrade!
+    end
+  end    
 
   class User
     include DataMapper::Resource
@@ -57,5 +63,4 @@ module Yutarbbs
   end
 
   DataMapper.finalize
-
 end
