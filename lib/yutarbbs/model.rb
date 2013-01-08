@@ -14,8 +14,18 @@ module Yutarbbs
         DataMapper::NamingConventions::Resource::UnderscoredAndPluralizedWithoutModule
 
       DataMapper.auto_upgrade!
+
+      if settings.debug and User.count().zero?
+        User.create(
+          userid: 'tester',
+          passwd: User.mkpasswd(''),
+          year: 2020,
+          name: "\ud14c\uc2a4\ud130",
+          updated_on: Time.now,
+        )
+      end
     end
-  end    
+  end
 
   class User
     include DataMapper::Resource
@@ -25,12 +35,16 @@ module Yutarbbs
     property :passwd, String, required: true, lazy: true
     property :name, String, required: true
     property :year, Integer, required: true
-    property :phone, String, required: true, lazy: [ :detail ]
-    property :email, String, required: true, lazy: [ :detail ]
-    property :remark, Text, required: true, lazy: [ :detail ]
+    property :phone, String, default: '', lazy: [ :detail ]
+    property :email, String, default: '', lazy: [ :detail ]
+    property :remark, Text, default: '', lazy: [ :detail ]
     property :updated_on, Date, required: true, lazy: [ :detail ]
 
     has n, :articles, parent_key: [ :id ], child_key: [ :uid ]
+
+    def self.mkpasswd text
+      Digest::MD5.hexdigest "gkfd#{text}gkfd"
+    end
   end
 
   class Article
