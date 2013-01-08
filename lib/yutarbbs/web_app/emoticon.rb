@@ -2,8 +2,8 @@
 
 module Yutarbbs
   class WebApp
-    EMOTICON_DIR = File.expand_path ENV['EMOTICON_DIR'] || 'emo'
-    raise "#{EMOTICON_DIR} doesn't exist." unless File.directory? EMOTICON_DIR
+    puts "EMOTICON_DIR env is not found; use #{TMP_DIR} instead." unless ENV['EMOTICON_DIR']
+    EMOTICON_DIR = File.expand_path ENV['EMOTICON_DIR'] || TMP_DIR
 
     get '/emoticons' do
       session!

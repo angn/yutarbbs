@@ -2,9 +2,8 @@ require 'builder'
 
 module Yutarbbs
   class WebApp
-    raise "ATTACHMENT_DIR is not set." unless ENV['ATTACHMENT_DIR']
-    ATTACHMENT_DIR = File.expand_path ENV['ATTACHMENT_DIR']
-    raise "#{ATTACHMENT_DIR} doesn't exist." unless File.directory? ATTACHMENT_DIR
+    puts "ATTACHMENT_DIR env is not found; use #{TMP_DIR} instead." unless ENV['ATTACHMENT_DIR']
+    ATTACHMENT_DIR = File.expand_path ENV['ATTACHMENT_DIR'] || TMP_DIR
 
     get '/' do
       if session?

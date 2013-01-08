@@ -10,9 +10,9 @@ Development
 You're using Ubuntu 12.04, aren't you? I am.
 
 1. sudo apt-get install ruby1.9
-2. gem1.9 install bundler
+2. sudo gem1.9 install bundler
 3. bundle install --without=production
-4. ATTACHMENT_DIR=. EMOTICON_DIR=. rackup
+4. rackup
 5. curl -i localhost:9292
 
 
