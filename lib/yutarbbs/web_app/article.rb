@@ -7,8 +7,13 @@ module Yutarbbs
     raise "#{ATTACHMENT_DIR} doesn't exist." unless File.directory? ATTACHMENT_DIR
 
     get '/' do
-      @notice = Article.last fid: 1
-      redirect "/thread/#{@notice.id}", 303 if session?
+      if session?
+        if notice = Article.last(fid: 1)
+          redirect "/thread/#{notice.id}", 303
+        else
+          redirect "/forum/1", 303
+        end
+      end
       haml :index
     end
 
