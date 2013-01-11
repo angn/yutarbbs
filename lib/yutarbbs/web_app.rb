@@ -29,10 +29,6 @@ module Yutarbbs
         cookies[:keeplogin] ? 14 * 86400 : nil
     end
 
-    not_found do
-      ''
-    end
-
     error DataObjects::SQLError do
       content_type 'text/plain;charset=utf-8'
       halt 500, "DATABASE ERROR\n--------------\n#{env['sinatra.error'].message}"

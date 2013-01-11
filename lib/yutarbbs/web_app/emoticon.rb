@@ -17,7 +17,7 @@ module Yutarbbs
       session!
       emoticon = params[:emoticon] or halt 205
       File.size(emoticon[:tempfile]) <= 100 * 1024 or
-        halt 400, alert('100KB 이하로 해줘요.')
+        error 400, alert('100KB 이하로 해줘요.')
       store emoticon[:tempfile], "#{EMOTICON_DIR}/#{emoticon[:filename]}"
       redirect back
     end
