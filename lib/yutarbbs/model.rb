@@ -4,28 +4,12 @@ require 'dm-adjust'
 require 'dm-migrations'
 
 module Yutarbbs
-  module Model
-    def self.init settings
-      DataMapper::Logger.new $stdout, settings.debug ? :debug : :warn
-      
-      DataMapper.setup :default, settings.database
+  DataMapper::Logger.new $stdout, ENV['DUMP_SQL'] ? :debug : :warn
+  
+  DataMapper.setup :default, "sqlite://#{TMP_DIR}/db"
 
-      DataMapper.repository(:default).adapter.resource_naming_convention =
-        DataMapper::NamingConventions::Resource::UnderscoredAndPluralizedWithoutModule
-
-      DataMapper.auto_upgrade!
-
-      if settings.debug and User.count().zero?
-        User.create(
-          userid: 'tester',
-          passwd: User.mkpasswd(''),
-          year: 2020,
-          name: "\ud14c\uc2a4\ud130",
-          updated_on: Time.now,
-        )
-      end
-    end
-  end
+  DataMapper.repository(:default).adapter.resource_naming_convention =
+    DataMapper::NamingConventions::Resource::UnderscoredAndPluralizedWithoutModule
 
   class User
     include DataMapper::Resource
@@ -76,5 +60,16 @@ module Yutarbbs
     belongs_to :article, child_key: [ :tid ]
   end
 
-  DataMapper.finalize
+  DataMapper.finalize.auto_upgrade!
+
+  if User.count().zero?
+    User.create(
+      userid: 'tester',
+      passwd: User.mkpasswd(''),
+      year: 2020,
+      name: "\ud14c\uc2a4\ud130",
+      updated_on: Time.now,
+    )
+    puts 'No user registered; created "tester" account.'
+  end
 end

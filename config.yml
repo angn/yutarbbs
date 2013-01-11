@@ -1,7 +1,0 @@
-development:
-  debug: true
-  database: "sqlite::memory:"
-production:
-  debug: false
-  database: "mysql://yutar@localhost/yutar"
-  
