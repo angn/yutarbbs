@@ -23,6 +23,7 @@ module Yutarbbs
     helpers Sinatra::Cookies
     helpers Helpers
     helpers Text
+    helpers Emoticon
 
     before do
       env['rack.session.options'][:expire_after] =

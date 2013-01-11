@@ -2,14 +2,9 @@
 
 module Yutarbbs
   class WebApp
-    puts "EMOTICON_DIR env is not found; use #{TMP_DIR} instead." unless ENV['EMOTICON_DIR']
-    EMOTICON_DIR = File.expand_path ENV['EMOTICON_DIR'] || TMP_DIR
-
     get '/emoticons' do
       session!
-      @emoticons = Dir.entries(EMOTICON_DIR)
-      @emoticons.delete_if { |e| e[0] == '.' }
-      @emoticons.each { |e| e.encode!('utf-8').sub! /\.[^.]*$/, '' }
+      @emoticons = Emoticon.collection.keys
       haml :emoticons
     end
 
@@ -18,15 +13,12 @@ module Yutarbbs
       emoticon = params[:emoticon] or halt 205
       File.size(emoticon[:tempfile]) <= 100 * 1024 or
         error 400, alert('100KB 이하로 해줘요.')
-      store emoticon[:tempfile], "#{EMOTICON_DIR}/#{emoticon[:filename]}"
+      Emoticon.add emoticon[:tempfile], emoticon[:filename]
       redirect back
     end
 
-    IMAGE_EXT = %w/jpg JPG jpeg JPEG gif GIF png PNG/
-
     get '/emo/*' do |name|
-      candidates = IMAGE_EXT.map { |ext| "#{EMOTICON_DIR}/#{name}.#{ext}" }
-      filename = candidates.find { |e| File.readable? e } or halt 404
+      filename = Emoticon.collection[name] or halt 404
       send_file filename
     end
   end
