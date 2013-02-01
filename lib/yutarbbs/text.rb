@@ -44,9 +44,9 @@ module Yutarbbs::Text
       '<em>방금</em>'
     elsif date >= Time.local(now.year, now.month, now.day)
       '<em>오늘</em>'
-    elsif date >= Time.local(now.year, now.month, now.day - 1)
+    elsif date >= Time.local(now.year, now.month, now.day) - 86400
       '어제'
-    elsif date >= Time.local(now.year, now.month, now.day - 2)
+    elsif date >= Time.local(now.year, now.month, now.day) - 172800
       '그제'
     elsif date >= Time.local(now.year)
       date.strftime '%-m/%-d'
