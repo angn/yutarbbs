@@ -19,7 +19,7 @@ module Yutarbbs::Text
 
   def _formattexteach text
     return text if text =~ %r{^<[A-Z/].*>$}i
-    Rack::Utils.escape_html(text).gsub %r{\b(https?://[^\s<]+)|([\w.]+@[\w.]+)|(?<!\w)@((?>[\w]+))(?!@)} do
+    Rack::Utils.escape_html(text).gsub %r{\b(https?:&#x2F;&#x2F;[^\s<]+)|([\w.]+@[\w.]+)|(?<!\w)@((?>[\w]+))(?!@)} do
       style = nil
       if $1 # website
         href, label = $1, $1
