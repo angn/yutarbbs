@@ -27,6 +27,7 @@ module Yutarbbs
         articles = Article.all fid: fid
         @threads += articles.all(:subject.like => "%#{@keyword}%")
         @threads += articles.all(:message.like => "%#{@keyword}%")
+        @threads = @threads.all order: [ :id.desc ]
       else
         @threads = Article.all fid: fid, order: [ :id.desc ],
           offset: @page * 15 - 15, limit: 15
