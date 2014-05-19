@@ -3,7 +3,7 @@
 module Yutarbbs
   class WebApp
     get '/gateway' do
-      session_end!
+      session.destroy
       redirect '/', 303
     end
 
@@ -12,18 +12,18 @@ module Yutarbbs
         userid: params[:userid],
         passwd: User.mkpasswd(params[:passwd]),
       )
-        session_end!
+        session.destroy
         error 404, alert('그런 사람 없어요.')
       end
       outdated = Time.now - user.updated_on.to_time > 90 * 24 * 60 * 60 # 3 months
-      session_start!
+      session.clear
       %w/id year name userid/.each do |k|
         session[k.to_sym] = user[k]
       end
       response.set_cookie :keeplogin, value: '1',
         expires: params[:keeplogin] ? Time.now + 365 * 86400 : Time.at(0)
       redirect '/me', 303 if outdated
-      redirect back
+      redirect back, 303
     end
 
     get '/me' do

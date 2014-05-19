@@ -12,7 +12,7 @@ html
         a(href="/")
           big yutar. the premium.
           small Yonsei Informatics Specialists Since 1998
-      - if session?
+      - if session[:userid]
         p.identity
           strong= session[:userid]
           = ' · '

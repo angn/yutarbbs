@@ -6,7 +6,7 @@ module Yutarbbs
     ATTACHMENT_DIR = File.expand_path ENV['ATTACHMENT_DIR'] || TMP_DIR
 
     get '/' do
-      if session?
+      if session[:id]
         if notice = Article.last(fid: 1)
           redirect "/thread/#{notice.id}", 303
         else

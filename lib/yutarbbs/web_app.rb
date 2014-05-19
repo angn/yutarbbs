@@ -1,20 +1,18 @@
 require 'sinatra/base'
-require 'sinatra/session'
 require 'slim'
 
 Encoding.default_external = Encoding::UTF_8
 
 module Yutarbbs
   class WebApp < Sinatra::Base
-    register Sinatra::Session
-
     set :dump_errors, development?
     enable :layout
     set :views, "#{ROOT}/views"
     set :public_folder, "#{ROOT}/public"
-    set :session_fail, '/'
-    set :session_name, 'yutarbbs'
-    set :session_secret, __FILE__
+
+    use Rack::Session::Cookie,
+      key: 'yutarbbs',
+      secret: __FILE__
 
     helpers Helpers
     helpers Text

@@ -1,5 +1,9 @@
 module Yutarbbs
   module Helpers
+    def session!
+      halt 401, slim(:index) unless session.key? :id
+    end
+
     def get_updated_forum
       in_a_day = Time.now - 24 * 60 * 60
       rs = Article.all(fields: [ :fid ], unique: true, :created_at.gt => in_a_day) +
