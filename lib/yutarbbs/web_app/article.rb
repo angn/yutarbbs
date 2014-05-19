@@ -56,8 +56,8 @@ module Yutarbbs
 
     get '/thread/*' do |tid|
       session!
-      if cookies[:lasttid] != tid
-        cookies[:lasttid] = tid
+      if request.cookies[:lasttid] != tid
+        response.set_cookie :lasttid, value: tid, path: '/'
         Article.all(id: tid, :uid.not => session[:id]).adjust! hits: 1
       end
       @thread = Article.get(tid) or halt 404

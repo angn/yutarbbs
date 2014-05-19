@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'thin', '~> 1.6.1'
 gem 'sinatra', '~> 1.4.4'
-gem 'sinatra-contrib', '~> 1.4.2'
 gem 'sinatra-session', '~> 1.0.0'
 gem 'slim', '~> 2.0.2'
 gem 'builder', '~> 3.1.4'

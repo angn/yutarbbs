@@ -1,18 +1,14 @@
 require 'sinatra/base'
-require 'sinatra/reloader'
 require 'sinatra/session'
-require 'sinatra/cookies'
 require 'slim'
 
 Encoding.default_external = Encoding::UTF_8
 
 module Yutarbbs
   class WebApp < Sinatra::Base
-    register Sinatra::Reloader if development?
     register Sinatra::Session
 
     set :dump_errors, development?
-    enable :logging
     enable :layout
     set :views, "#{ROOT}/views"
     set :public_folder, "#{ROOT}/public"
@@ -20,14 +16,13 @@ module Yutarbbs
     set :session_name, 'yutarbbs'
     set :session_secret, __FILE__
 
-    helpers Sinatra::Cookies
     helpers Helpers
     helpers Text
     helpers Emoticon
 
     before do
       env['rack.session.options'][:expire_after] =
-        cookies[:keeplogin] ? 14 * 86400 : nil
+        request.cookies[:keeplogin] ? 14 * 86400 : nil
     end
 
     error DataObjects::SQLError do
