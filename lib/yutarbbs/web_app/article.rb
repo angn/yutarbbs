@@ -13,10 +13,13 @@ module Yutarbbs
           redirect "/forum/1", 303
         end
       end
-      haml :index
+      slim :index
     end
 
     get '/forum/*/*' do |fid, page|
+      if params[:p]
+        redirect "/forum/#{fid}/#{params[:p].to_i}", 301
+      end
       session!
       @fid = fid.to_i
       halt 404 unless forum_name[@fid]
@@ -33,7 +36,7 @@ module Yutarbbs
           offset: @page * 15 - 15, limit: 15
       end
 
-      haml :forum
+      slim :forum
     end
 
     get '/forum/*' do |fid|
@@ -60,7 +63,7 @@ module Yutarbbs
       @thread = Article.get(tid) or halt 404
       path = "#{ATTACHMENT_DIR}/#{@thread.id}-#{@thread.attachment}"
       @size = File.readable?(path) && File.size(path)
-      haml :thread
+      slim :thread
     end
 
     get '/attachment/*/*' do |tid, filename|
@@ -95,13 +98,13 @@ module Yutarbbs
     get '/edit_thread/forum/*' do |fid|
       session!
       @thread = Article.new fid: fid.to_i
-      haml :edit_thread
+      slim :edit_thread
     end
 
     get '/edit_thread/*' do |tid|
       session!
       @thread = Article.get(tid) or halt 404
-      haml :edit_thread
+      slim :edit_thread
     end
 
     post '/edit_thread/forum/*' do |fid|

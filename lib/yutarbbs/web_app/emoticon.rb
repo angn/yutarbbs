@@ -5,7 +5,7 @@ module Yutarbbs
     get '/emoticons' do
       session!
       @emoticons = Emoticon.collection.keys
-      haml :emoticons
+      slim :emoticons
     end
 
     post '/emoticons' do

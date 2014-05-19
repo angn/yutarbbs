@@ -2,7 +2,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/session'
 require 'sinatra/cookies'
-require 'haml'
+require 'slim'
 
 Encoding.default_external = Encoding::UTF_8
 

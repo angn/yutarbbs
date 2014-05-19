@@ -29,7 +29,7 @@ module Yutarbbs
     get '/me' do
       session!
       @user = User.get(session[:id]) or halt 404
-      haml :me
+      slim :me
     end
 
     post '/me' do
@@ -55,7 +55,7 @@ module Yutarbbs
     get '/users' do
       session!
       @users = User.all :order => [ :year.desc, :name ]
-      haml :users
+      slim :users
     end
   end
 end

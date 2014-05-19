@@ -1,0 +1,9 @@
+h2 이모티콘
+form(method="post" enctype="multipart/form-data")
+  p
+    input(type="file" name="emoticon")
+    button(type="submit") 올리기
+ul.emoticons
+  - @emoticons.each do |name|
+    li
+      a(href="/emo/#{name}")= name

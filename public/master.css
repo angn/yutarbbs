@@ -118,7 +118,8 @@ a:active *, a:hover * {
 }
 
 del {
-    color: #999;
+    color: #ccc;
+    text-decoration: none;
 }
 
 .container {
