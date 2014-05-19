@@ -1,4 +1,0 @@
---- 
-environment: production
-servers: 4
-socket: /tmp/yutarbbs.sock
