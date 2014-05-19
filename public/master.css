@@ -437,7 +437,7 @@ h3, thead td {
     white-space: pre-wrap;
     *white-space: pre;
     word-wrap: break-word;
-	line-height: 1.6;
+	line-height: 1.75;
     letter-spacing: -0.1ex;
     text-rendering: optimizeLegibility;
 }

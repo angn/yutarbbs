@@ -1,19 +1,16 @@
-- if session?
-  h2 공지사항
-  - if @notice
-    .thread
-      h3= @notice[:subject]
-      .article
-        p== formattext @notice[:message]
-- else
-  form(name="login" action="/gateway" method="post" class="login")
-    p
-      label
-        span 아이디
-        input(type="text" name="userid" autofocus autocorrect="off" autocapitalize="off")
-      label
-        span 암호
-        input(type="password" name="passwd")
-      button(type="submit") 로그인
-      label
-        input(type="checkbox" name="keeplogin") 로그인 유지
+form(name="login" action="/gateway" method="post" class="login")
+  p
+    label
+      span 아이디
+      = ' '
+      input(type="text" name="userid" autofocus autocorrect="off" autocapitalize="off")
+    = ' '
+    label
+      span 암호
+      = ' '
+      input(type="password" name="passwd")
+    = ' '
+    button(type="submit") 로그인
+    = ' '
+    label
+      input(type="checkbox" name="keeplogin") 로그인 유지
