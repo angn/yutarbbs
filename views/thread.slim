@@ -21,6 +21,7 @@ h2= forum_name[@thread.fid]
   - if @size
     blockquote.attachment
       a(href="/attachment/#{@thread.id}/#{@thread.attachment}")= @thread.attachment
+      = ' '
       small= "(#{number_format @size >> 10}KB)"
       br
       - if @thread.attachment =~ /\.(jpe?g|gif|png|bmp)$/i
