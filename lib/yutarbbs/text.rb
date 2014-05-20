@@ -1,7 +1,6 @@
 # encoding=utf-8
 
 require 'json'
-require 'cgi'
 require 'rack/utils'
 
 module Yutarbbs::Text
@@ -11,10 +10,7 @@ module Yutarbbs::Text
 
   def formattext text
     chunks = text.split %r{(<[a-z]+[^>]*>|</[a-z]+[^>]*>)}i
-    text = chunks.map { |e| _formattexteach e } * ''
-    text.sub %r{<tex>(.+?)</tex>}m do |e|
-      %Q{<img src="http://www.forkosh.dreamhost.com/mathtex.cgi?#{CGI.escape e}">}
-    end
+    chunks.map { |e| _formattexteach e } * ''
   end
 
   def _formattexteach text

@@ -4,8 +4,6 @@ h2= forum_name[@thread.fid]
     h3
       input(type="text" name="subject" size="80" value="#{@thread.subject}" autofocus)
     .article
-      textarea(name="message" cols="80" rows="20")= @thread.message
-      small &lt;tex&gt;\code&lt;/tex&gt;
-      br
+      textarea(name="message" cols="80" rows="40")= @thread.message
       input(type="file" name="attachment" size="30")
       button(type="submit" accesskey="s") 작성 ✍
