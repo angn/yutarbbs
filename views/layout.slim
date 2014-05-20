@@ -16,7 +16,7 @@ html
         p.identity
           strong= session[:userid]
           = ' · '
-          a.minor(href="/me") 수정
+          a(href="/me") 수정
           = ' · '
           a(href="/gateway") 로그아웃
         p.menu
@@ -25,9 +25,9 @@ html
               = forum_name[e]
               - if is_forum_updated e
                 em *
-            = ' · '
+            span.minor= ' · '
           a.fade(accesskey="9" href="/users") 회원명부
-          = ' · '
+          span.minor= ' · '
           a.fade.minor(accesskey="0" href="/emoticons") 이모티콘
       == yield
     script(src="/shortcut.js")
