@@ -14,7 +14,7 @@ module Yutarbbs
       File.size(emoticon[:tempfile]) <= 100 * 1024 or
         error 400, alert('100KB 이하로 해줘요.')
       Emoticon.add emoticon[:tempfile], emoticon[:filename]
-      redirect back
+      redirect back, 303
     end
 
     get '/emo/*' do |name|

@@ -48,7 +48,7 @@ module Yutarbbs
           phone: params[:phone],
           remark: params[:remark],
           updated_on: Time.now)
-        redirect back
+        redirect back, 303
       end
     end
 
