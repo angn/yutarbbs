@@ -815,6 +815,10 @@ a.github:hover {
         text-shadow: 0 1px 0 #fff;
     }
 
+    .thread dl .date:before {
+        content: '— ';
+    }
+
     .thread dl .info .author,
     .thread dl .info .hid {
         display: inline;
