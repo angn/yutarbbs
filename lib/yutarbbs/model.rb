@@ -2,6 +2,7 @@ require 'dm-core'
 require 'dm-aggregates'
 require 'dm-adjust'
 require 'dm-migrations'
+require 'digest'
 
 module Yutarbbs
   DataMapper::Logger.new $stdout, ENV['DUMP_SQL'] ? :debug : :warn
