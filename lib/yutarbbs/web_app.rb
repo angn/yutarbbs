@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'slim'
+require 'sass/plugin/rack'
 
 Encoding.default_external = Encoding::UTF_8
 
@@ -13,6 +14,11 @@ module Yutarbbs
     use Rack::Session::Cookie,
       key: 'yutarbbs',
       secret: __FILE__
+
+    use Sass::Plugin::Rack
+    Sass::Plugin.options.update style: :compressed,
+      syntax: :scss,
+      cache: false
 
     helpers Helpers
     helpers Text

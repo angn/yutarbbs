@@ -5,12 +5,13 @@ html
     meta(name="viewport" content="initial-scale=1.0,minimum-scale=1.0")
     meta(name="verify-v1" content="Vk1vAsUQPxHe0RgJW6YfJN3njmjm3VjxLPKADaq9SfA=")
     title yutar.net
-    link(rel="stylesheet" href="/master.css")
+    link(rel="stylesheet" href="/stylesheets/master.css")
   body
     .container
       h1
         a(href="/")
           big yutar. the premium.
+          == ' '
           small Yonsei Informatics Specialists Since 1998
       - if session[:userid]
         p.identity

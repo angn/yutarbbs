@@ -1,12 +1,10 @@
-@charset 'utf-8';
-
 body,h1,h2,h3,h4,h5,h6,p,pre,ul,ol,li,dl,dt,dd,table,th,td,blockquote {
     margin: 0;
     padding: 0;
 }
 
 body {
-    background: #ddd url(noise.png);
+    background: #ddd url(/noise.png);
     color: #000;
     font-size: 92%;
     -webkit-text-size-adjust: none;
@@ -15,8 +13,8 @@ body {
 
 :root body {
     background-attachment: scroll, fixed;
-    background-image: url(noise.png), -webkit-linear-gradient(#bbb, #eee);
-    background-image: url(noise.png#), linear-gradient(#bbb, #eee);
+    background-image: url(/noise.png), -webkit-linear-gradient(#bbb, #eee);
+    background-image: url(/noise.png), linear-gradient(#bbb, #eee);
 }
 
 body, input, textarea, button, select {
@@ -101,7 +99,7 @@ del {
     padding: 0 0 1px;
     border-radius: 1ex;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 h1 {
@@ -117,7 +115,7 @@ h1 a {
     display: block;
     width: 750px;
     height: 60px;
-    background: #224f9a no-repeat 98% 4px url(yonsei.jpg);
+    background: #224f9a no-repeat 98% 4px url(/yonsei.jpg);
     color: #fff;
 }
 
@@ -296,7 +294,7 @@ h3, thead td {
     position: absolute;
     width: 16px;
     height: 16px;
-    background: no-repeat url(attachment.gif);
+    background: no-repeat url(/attachment.gif);
     text-indent: -99in;
 }
 
@@ -378,7 +376,7 @@ h3, thead td {
 
 .thread .attachment {
     margin: 1em;
-    background: no-repeat -4px 0 url(attachment.gif);
+    background: no-repeat -4px 0 url(/attachment.gif);
     text-indent: 15px;
 }
 
@@ -580,6 +578,10 @@ a.github:hover {
         font-size: 100%;
     }
 
+    :root body {
+        background-image: none;
+    }
+
     a:focus, a:active, a:hover {
         color: #224f9a;
         background-color: transparent;
@@ -651,7 +653,8 @@ a.github:hover {
         text-align: center;
         color: #fff;
         background: #224f9a;
-        font-size: 90%;
+        font-size: 92%;
+        letter-spacing: 0;
         text-shadow: #248 0 1px 1px;
     }
 
@@ -836,7 +839,7 @@ a.github:hover {
         width: 16px;
         height: 12px;
         margin: 3px;
-        background: url(email.png);
+        background: url(/email.png);
     }
 
 }
