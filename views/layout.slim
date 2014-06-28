@@ -14,21 +14,21 @@ html
           small Yonsei Informatics Specialists Since 1998
       - if session[:userid]
         p.identity
-          strong= session[:userid]
-          = ' · '
-          a(href="/me") 수정
-          = ' · '
-          a(href="/gateway") 로그아웃
-        p.menu
+          a(href="/me")
+            strong= session[:userid]
+          == ' '
+          a(href="/gateway" accesskey="-") 로그아웃
+        ul.menu
           - [ %w/` 1 2 3 4 5 6 7 8/, [ 1, 2, 8, 10, 9, 6, 3, 4, 7 ] ].transpose.each do |key, e|
-            a(accesskey=key href="/forum/#{e}")
-              = forum_name[e]
-              - if is_forum_updated e
-                em *
-            span.minor= ' · '
-          a.fade(accesskey="9" href="/users") 회원명부
-          span.minor= ' · '
-          a.fade.minor(accesskey="0" href="/emoticons") 이모티콘
+            li
+              a(accesskey=key href="/forum/#{e}")
+                = forum_name[e]
+                - if is_forum_updated e
+                  em *
+          li.fade
+            a(accesskey="9" href="/users") 회원명부
+          li.fade
+            a(accesskey="0" href="/emoticons") ☺☻
       == yield
     script(src="/shortcut.js")
     a.github(href="https://github.com/holies/yutarbbs" title="Fork me on GitHub")

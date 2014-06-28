@@ -31,10 +31,10 @@ h2= forum_name[@thread.fid]
   p.remark
     - author = @thread.user
     strong= '%02d%s' % [ author.year, author.name ]
-    - if author.phone
+    - unless author.phone.empty?
       br
       = "☎ #{formatphone author.phone}"
-    - if author.email
+    - unless author.email.empty?
       br
       a(href="mailto:#{author.email}")= author.email
     br
