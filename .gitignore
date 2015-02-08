@@ -1,3 +1,4 @@
 /.bundle
 /tmp
 /public/stylesheets/*.css
+/public/stylesheets/*.css.map
