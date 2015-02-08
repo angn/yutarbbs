@@ -556,21 +556,6 @@ a.twit:hover:before {
     margin: 1em;
 }
 
-.github {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 140px;
-    height: 140px;
-    background: no-repeat 100% 0
-        url(https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png);
-}
-
-a.github:hover {
-    background: no-repeat 100% 0
-        url(https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png);
-}
-
 @media only screen and (max-width: 767px) {
 
     body {
@@ -825,12 +810,6 @@ a.github:hover {
 
     .me input, .me button, .me textarea {
         width: 90%;
-    }
-}
-
-@media only screen and (max-width: 1024px) {
-    .github {
-        display: none;
     }
 }
 
