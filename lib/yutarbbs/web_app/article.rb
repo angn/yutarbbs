@@ -5,17 +5,6 @@ module Yutarbbs
     puts "ATTACHMENT_DIR env is not found; use #{TMP_DIR} instead." unless ENV['ATTACHMENT_DIR']
     ATTACHMENT_DIR = File.expand_path ENV['ATTACHMENT_DIR'] || TMP_DIR
 
-    get '/' do
-      if session[:id]
-        if notice = Article.last(fid: 1)
-          redirect "/thread/#{notice.id}", 303
-        else
-          redirect "/forum/1", 303
-        end
-      end
-      slim :index
-    end
-
     get '/forum/*/*' do |fid, page|
       if params[:p]
         redirect "/forum/#{fid}/#{params[:p].to_i}", 301

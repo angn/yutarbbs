@@ -16,9 +16,7 @@ module Yutarbbs
       secret: __FILE__
 
     use Sass::Plugin::Rack
-    Sass::Plugin.options.update style: :compressed,
-      syntax: :scss,
-      cache: false
+    Sass::Plugin.options.update style: :compressed, cache: false
 
     helpers Helpers
     helpers Text
@@ -37,6 +35,17 @@ module Yutarbbs
     error do
       content_type 'text/plain;charset=utf-8'
       halt 500, "#{env['sinatra.error'].name}\n\n#{env['sinatra.error'].message}"
+    end
+
+    get '/' do
+      if session[:id]
+        if notice = Article.last(fid: 1)
+          redirect "/thread/#{notice.id}", 303
+        else
+          redirect "/forum/1", 303
+        end
+      end
+      slim :index, layout: :new
     end
   end
 end

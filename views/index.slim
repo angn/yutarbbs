@@ -1,16 +1,13 @@
-form(name="login" action="/gateway" method="post" class="login")
-  p
+body
+  h1 yutar. the premium.
+  p Yonsei Informatics Specialists Since 1998
+  form(name="login" action="/gateway" method="post")
+    input(type="text" name="userid" autofocus autocorrect="off" autocapitalize="off" size="12" placeholder="ID")
+    == ' '
+    input(type="password" name="passwd" size="12" placeholder="암호")
+    == ' '
+    button 로그인
+    == ' '
     label
-      span 아이디
-      = ' '
-      input(type="text" name="userid" autofocus autocorrect="off" autocapitalize="off" size="12")
-    = ' '
-    label
-      span 암호
-      = ' '
-      input(type="password" name="passwd" size="12")
-    = ' '
-    button(type="submit") 로그인
-    = ' '
-    label
-      input(type="checkbox" name="keeplogin") 로그인 유지
+      input(type="checkbox" name="keeplogin")
+      |  로그인 유지

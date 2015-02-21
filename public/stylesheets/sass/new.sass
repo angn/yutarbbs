@@ -1,0 +1,66 @@
+@import "normalize"
+
+body
+  margin: 5em
+  background: #224f9a
+  color: #fff
+  line-height: 1.618
+  font-family: Tahoma, sans-serif
+  text-rendering: optimizeLegibility
+
+  &:after
+    content: ""
+    position: fixed
+    z-index: -1
+    left: 10em
+    top: 0
+    width: 7em
+    height: 100%
+    border-width: 0 12em 0 7em
+    border-style: solid
+    border-color: #466eaf
+
+h1
+  margin-top: 1em
+  font-weight: 400
+  font-size: 400%
+
+p
+  text-transform: uppercase
+
+form
+  margin-top: 2em
+
+label
+  white-space: nowrap
+
+input[type=text], input[type=password], button
+  vertical-align: middle
+  border: 0
+  padding: .1em .2em
+  line-height: 1.618
+  font-size: 150%
+
+input[type=text], input[type=password]
+  width: 6em
+  background: #16275c
+
+  &:focus, &:hover
+    background: #000
+
+button
+  background: #b6c0d8 // #466eaf
+  color: #000
+
+  &:focus, &:hover
+    background: #fff
+
+@media screen and (max-width: 767px)
+  body
+    margin: 1em
+
+  h1
+    font-size: 200%
+
+  input[type=text], input[type=password], button
+    font-size: 100%
