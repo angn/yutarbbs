@@ -1,7 +1,7 @@
 module Yutarbbs
   module Helpers
     def session!
-      halt 401, slim(:index) unless session.key? :id
+      halt 401, slim(:index, layout: :new) unless session.key? :id
     end
 
     def get_updated_forum
